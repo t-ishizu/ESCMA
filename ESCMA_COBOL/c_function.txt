@@ -1,0 +1,29 @@
+#begin{file description}
+0.1	0	0	C:\Users\t-ishizu\Documents\cobcurses-master\src\sdesign\ESCMAver2\sd002000.cob
+0.2	0	0	C:\Users\t-ishizu\Documents\cobcurses-master\src\sdesign\ESCMAver2\sd002010.cob
+0.3	0	0	C:\Users\t-ishizu\Documents\cobcurses-master\src\sdesign\ESCMAver2\sd002020.cob
+0.4	0	0	C:\Users\t-ishizu\Documents\cobcurses-master\src\sdesign\ESCMAver2\sd002030.cob
+0.5	0	0	C:\Users\t-ishizu\Documents\cobcurses-master\src\sdesign\ESCMAver2\sd002033.cob
+0.6	0	0	C:\Users\t-ishizu\Documents\cobcurses-master\src\sdesign\ESCMAver2\sd002035.cob
+0.7	0	0	C:\Users\t-ishizu\Documents\cobcurses-master\src\sdesign\ESCMAver2\sd002040.cob
+0.8	0	0	C:\Users\t-ishizu\Documents\cobcurses-master\src\sdesign\ESCMAver2\sd002050.cob
+0.9	0	0	C:\Users\t-ishizu\Documents\cobcurses-master\src\sdesign\ESCMAver2\sd002060.cob
+0.10	0	0	C:\Users\t-ishizu\Documents\cobcurses-master\src\sdesign\ESCMAver2\sd002070.cob
+0.11	0	0	C:\Users\t-ishizu\Documents\cobcurses-master\src\sdesign\ESCMAver2\sd002080.cob
+0.12	0	0	C:\Users\t-ishizu\Documents\cobcurses-master\src\sdesign\ESCMAver2\sd002085.cob
+0.13	0	0	C:\Users\t-ishizu\Documents\cobcurses-master\src\sdesign\ESCMAver2\sd002090.cob
+#end{file description}
+#begin{clone}
+#begin{set}
+0.6	559,13,1867	570,19,1905	0
+0.6	575,13,1919	586,19,1957	0
+0.7	315,13,1066	326,19,1104	0
+0.7	303,13,1027	314,19,1065	0
+0.8	301,13,950	312,19,988	0
+0.8	285,13,898	296,19,936	0
+0.10	370,13,1209	381,19,1247	0
+0.10	358,13,1170	369,19,1208	0
+0.12	318,13,989	329,19,1027	0
+0.12	306,13,950	317,19,988	0
+#end{set}
+#end{clone}
