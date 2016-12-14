@@ -1,4 +1,4 @@
-package jp.ac.osaka.u.ist.t_ishizu.TestHeuristicICCA;
+package jp.ac.osaka.u.ist.t_ishizu.ESCMA_COBOL;
 
 public class CloneLevel {
 	public static final int functionLevel = 0;

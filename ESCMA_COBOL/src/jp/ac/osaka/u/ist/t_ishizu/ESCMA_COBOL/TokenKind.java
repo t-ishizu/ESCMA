@@ -1,4 +1,4 @@
-package jp.ac.osaka.u.ist.t_ishizu.TestHeuristicICCA;
+package jp.ac.osaka.u.ist.t_ishizu.ESCMA_COBOL;
 
 public class TokenKind {
 	public static final int RESERVED = 0;

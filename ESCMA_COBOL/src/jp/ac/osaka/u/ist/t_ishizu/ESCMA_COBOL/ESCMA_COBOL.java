@@ -1,4 +1,8 @@
-package jp.ac.osaka.u.ist.t_ishizu.TestHeuristicICCA;
+package jp.ac.osaka.u.ist.t_ishizu.ESCMA_COBOL;
+
+import static jp.ac.osaka.u.ist.t_ishizu.ESCMA_COBOL.CloneLevel.*;
+import static jp.ac.osaka.u.ist.t_ishizu.ESCMA_COBOL.Method.*;
+import static jp.ac.osaka.u.ist.t_ishizu.ESCMA_COBOL.TokenKind.*;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -13,13 +17,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+
 import org.moeaframework.Executor;
 
-import static jp.ac.osaka.u.ist.t_ishizu.TestHeuristicICCA.Method.*;
-import static jp.ac.osaka.u.ist.t_ishizu.TestHeuristicICCA.CloneLevel.*;
-import static jp.ac.osaka.u.ist.t_ishizu.TestHeuristicICCA.TokenKind.*;
-
-public class TestHeuristicICCA {
+public class ESCMA_COBOL {
 	public static int LOC = 0;
 	public static int SLOC = 0;
 	public static int CLOC =0;
@@ -47,12 +48,12 @@ public class TestHeuristicICCA {
 	public static int iterateIndex=0;
 	//public static boolean timer = false;
 	public static int THRESHOLD_RNR = 50;
-	
+
 	public static void main(String[] args){
 		/*
 		if(args.length==0){
 			System.out.println("ESCMA version \""+2+"." + 1+ "\"");
-			System.out.println("Usage:java jar ESCMA.jar CCFinder‚Ìo—ÍŒ‹‰Êƒtƒ@ƒCƒ‹‚ÌƒpƒX");
+			System.out.println("Usage:java jar ESCMA.jar CCFinderï¿½Ìoï¿½ÍŒï¿½ï¿½Êƒtï¿½@ï¿½Cï¿½ï¿½ï¿½Ìƒpï¿½X");
 			System.exit(0);
 		}
 		*/
@@ -66,16 +67,16 @@ public class TestHeuristicICCA {
 		createPackedCloneList(fileIdList, fileToCloneMap,cloneSetList);
 		numOfClones = countNumClone(cloneSetList);
 		numOfCloneSets = countNumCloneSet(cloneSetList);
-		//System.out.println("RNR=50‚Å‚·");
-		//System.out.println("*ƒtƒBƒ‹ƒ^ƒŠƒ“ƒO‘O‚ÌŠeƒƒgƒŠƒNƒX");
-		//System.out.println("ƒtƒ@ƒCƒ‹‚ÌŒÂ”\tƒR[ƒhƒNƒ[ƒ“‚ÌŒÂ”\tƒNƒ[ƒ“ƒZƒbƒg‚ÌŒÂ”\tLOC\tSLOC\tCLOC\tƒI[ƒo[ƒ‰ƒbƒv‚µ‚Ä‚¢‚és”");
+		//System.out.println("RNR=50ï¿½Å‚ï¿½");
+		//System.out.println("*ï¿½tï¿½Bï¿½ï¿½ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½Oï¿½Oï¿½ÌŠeï¿½ï¿½ï¿½gï¿½ï¿½ï¿½Nï¿½X");
+		//System.out.println("ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ÌŒÂï¿½\tï¿½Rï¿½[ï¿½hï¿½Nï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ÌŒÂï¿½\tï¿½Nï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½Zï¿½bï¿½gï¿½ÌŒÂï¿½\tLOC\tSLOC\tCLOC\tï¿½Iï¿½[ï¿½oï¿½[ï¿½ï¿½ï¿½bï¿½vï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½sï¿½ï¿½");
 		System.out.print(fileIdList.size()+"\t"+numOfClones+"\t"+numOfCloneSets+"\t"+LOC+"\t"+SLOC+"\t"+CLOC+"\t"+OLOC);
 		System.out.print("\t");
 		pw.print(fileIdList.size()+"\t"+numOfClones+"\t"+numOfCloneSets+"\t"+LOC+"\t"+SLOC+"\t"+CLOC+"\t"+OLOC);
 		pw.print("\t");
 		clearSCCList(cloneSetList);
 		//System.out.println();
-		
+
 		/*function level*/
 		level = functionLevel;
 		cloneSetList = createCloneSetList(args[0]);
@@ -84,13 +85,13 @@ public class TestHeuristicICCA {
 		createPackedCloneList(fileIdList,fileToCloneMap,cloneSetList);
 		//FnumOfClones = countNumClone(cloneSetList);
 		//FnumOfCloneSets = countNumCloneSet(cloneSetList);
-		//System.out.println("*ƒtƒBƒ‹ƒ^ƒŠƒ“ƒOŒã‚Ìs”‚ÉŠÖ‚·‚éƒƒgƒŠƒNƒX");
-		//System.out.println("CLOC\tƒI[ƒo[ƒ‰ƒbƒv‚µ‚Ä‚¢‚és”");
+		//System.out.println("*ï¿½tï¿½Bï¿½ï¿½ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½Oï¿½ï¿½Ìsï¿½ï¿½ï¿½ÉŠÖ‚ï¿½ï¿½éƒï¿½gï¿½ï¿½ï¿½Nï¿½X");
+		//System.out.println("CLOC\tï¿½Iï¿½[ï¿½oï¿½[ï¿½ï¿½ï¿½bï¿½vï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½sï¿½ï¿½");
 		//System.out.print(FCLOC+"\t"+FOLOC);
 		System.out.print("\t");
 		//System.out.println();
-		//System.out.println("*ƒtƒBƒ‹ƒ^ƒŠƒ“ƒOŒã‚ÌƒNƒ[ƒ“‚ÌŒÂ”:BASIC");
-		//System.out.println("ƒR[ƒhƒNƒ[ƒ“‚ÌŒÂ”\tƒNƒ[ƒ“ƒZƒbƒg‚ÌŒÂ”");
+		//System.out.println("*ï¿½tï¿½Bï¿½ï¿½ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½Oï¿½ï¿½ÌƒNï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ÌŒÂï¿½:BASIC");
+		//System.out.println("ï¿½Rï¿½[ï¿½hï¿½Nï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ÌŒÂï¿½\tï¿½Nï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½Zï¿½bï¿½gï¿½ÌŒÂï¿½");
 		//System.out.println(FnumOfClones+"\t"+FnumOfCloneSets);
 		openCloneSet(fileIdList,cloneSetList);
 		clearSCCList(cloneSetList);
@@ -106,7 +107,7 @@ public class TestHeuristicICCA {
 		pw.print(FunctionTime);
 		pw.print("\t");
 		//System.out.println();
-		
+
 		/*heuristic level*/
 		level++;
 		cloneSetList = createCloneSetList(args[0]);
@@ -116,8 +117,8 @@ public class TestHeuristicICCA {
 		//FnumOfCloneSets = FnumOfClones = 0;
 		//FnumOfClones = countNumClone(cloneSetList);
 		//FnumOfCloneSets = countNumCloneSet(cloneSetList);
-		//System.out.println("*ƒtƒBƒ‹ƒ^ƒŠƒ“ƒOŒã‚ÌŠeƒNƒ[ƒ“‚ÌŒÂ”:HEURISTIC");
-		//System.out.println("ƒR[ƒhƒNƒ[ƒ“‚ÌŒÂ”\tƒNƒ[ƒ“ƒZƒbƒg‚ÌŒÂ”");
+		//System.out.println("*ï¿½tï¿½Bï¿½ï¿½ï¿½^ï¿½ï¿½ï¿½ï¿½ï¿½Oï¿½ï¿½ÌŠeï¿½Nï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ÌŒÂï¿½:HEURISTIC");
+		//System.out.println("ï¿½Rï¿½[ï¿½hï¿½Nï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ÌŒÂï¿½\tï¿½Nï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½Zï¿½bï¿½gï¿½ÌŒÂï¿½");
 		//System.out.println(FnumOfClones+"\t"+FnumOfCloneSets);
 		openCloneSet(fileIdList,cloneSetList);
 		//System.out.println("Greedy\tHC\tSA\tGA");
@@ -125,7 +126,7 @@ public class TestHeuristicICCA {
 		pw.print(GreedyLevelR+"\t");
 		clearSCCList(cloneSetList);
 		GreedyTime = endTimer();
-		
+
 		level++;
 		cloneSetList = createCloneSetList(args[0]);
 		fileToCloneMap = createFileToCloneMap(cloneSetList);
@@ -135,7 +136,7 @@ public class TestHeuristicICCA {
 		HCTime = endTimer();
 		System.out.print(HCLevelR+"\t");
 		pw.print(HCLevelR+"\t");
-		
+
 		level++;
 		cloneSetList = createCloneSetList(args[0]);
 		fileToCloneMap = createFileToCloneMap(cloneSetList);
@@ -145,7 +146,7 @@ public class TestHeuristicICCA {
 		SATime = endTimer();
 		System.out.print(SALevelR+"\t");
 		pw.print(SALevelR+"\t");
-		
+
 		level++;
 		cloneSetList = createCloneSetList(args[0]);
 		fileToCloneMap = createFileToCloneMap(cloneSetList);
@@ -162,7 +163,7 @@ public class TestHeuristicICCA {
 		pw.println(GreedyTime + "\t" + HCTime +"\t" + SATime + "\t" + GATime);
 		pw.close();
 	}
-	
+
 	public static BufferedReader getBufferedReader(String file){
 		File input = new File(file);
 		if(!input.exists()){
@@ -176,7 +177,7 @@ public class TestHeuristicICCA {
 		}
 		return null;
 	}
-	
+
 	public static ArrayList<String> createFileIdList(String pass){
 		BufferedReader br = getBufferedReader(pass);
 		ArrayList<String> fileIdList = new ArrayList<String>();
@@ -200,7 +201,7 @@ public class TestHeuristicICCA {
 		}
 		return fileIdList;
 	}
-	
+
 	public static ArrayList<CloneSet> createCloneSetList(String pass){
 		BufferedReader br = getBufferedReader(pass);
 		ArrayList<CloneSet> cloneSetList = new ArrayList<CloneSet>();
@@ -236,7 +237,7 @@ public class TestHeuristicICCA {
 		isDispersive(cloneSetList);
 		return cloneSetList;
 	}
-	
+
 	public static void isDispersive(ArrayList<CloneSet> cloneSetList){
 		for(CloneSet cs : cloneSetList){
 			int fileId = cs.getCloneList().get(0).getFileId();
@@ -247,7 +248,7 @@ public class TestHeuristicICCA {
 			}
 		}
 	}
-	
+
 	public static HashMap<Integer,ArrayList<CodeClone>> createFileToCloneMap(ArrayList<CloneSet> cloneSetList){
 		HashMap<Integer,ArrayList<CodeClone>> fileToCloneMap = new HashMap<Integer,ArrayList<CodeClone>>();
 		for(CloneSet cs : cloneSetList){
@@ -260,7 +261,7 @@ public class TestHeuristicICCA {
 		}
 		return fileToCloneMap;
 	}
-	
+
 	public static  void createPackedCloneList(ArrayList<String> fileList,HashMap<Integer,ArrayList<CodeClone>>cloneMap,ArrayList<CloneSet> cloneSetList){
 		LOC =0;
 		SLOC = 0;
@@ -277,12 +278,12 @@ public class TestHeuristicICCA {
 				Arrays.sort(sorted_key);
 				SLOC+=getSLOC(tokenMap.get(sorted_key[0]).get(0));
 				if(cloneMap.containsKey(fileId)){
-					
+
 					for(CodeClone c : cloneMap.get(fileId)){
 						//if(c.getParent().getRNR()>=RNR){
 						ArrayList<Tokens> codeList = new ArrayList<Tokens>();
 							Tokens currentToken = null;
-							
+
 							int comment_line = -1;
 							boolean comment_out = false;
 							for(Tokens t:tokenMap.get(c.getLS())){
@@ -299,7 +300,7 @@ public class TestHeuristicICCA {
 								}else if(currentToken.isRComment()){
 									comment_out = false;
 								}else if(currentToken.line==comment_line||comment_out){
-									
+
 								}else if((currentToken.line<c.getLE()) || ((currentToken.line==c.getLE()) && (currentToken.column < c.getCE())) ){
 									codeList.add(currentToken);
 									currentToken.setClone();
@@ -336,9 +337,9 @@ public class TestHeuristicICCA {
 				*/
 			}
 		}
-		
+
 	}
-	
+
 	public static HashMap<Integer,ArrayList<Tokens>> createTokenMap(String pass){
 		HashMap<Integer,ArrayList<Tokens>> tokenMap = new HashMap<Integer,ArrayList<Tokens>>();
 		BufferedReader br = getBufferedReader(pass);
@@ -354,7 +355,7 @@ public class TestHeuristicICCA {
 				ArrayList<Tokens> tokenList = new ArrayList<Tokens>();
 				String[] code_split = str.split("((?<=\\.)|(?=\\.))|((?<=\\s)|(?=\\s))|((?<=\\{)|(?=\\{))|((?<=\\})|(?=\\}))|((?<=\\()|(?=\\())|((?<=\\))|(?=\\))|((?<=;)|(?=;))|((?<=,)|(?=,)))|((?<=//)|(?=//))|((?<=/\\*)|(?=/\\*))|((?<=\\*/)|(?=\\*/))|((?<=:)|(?=:))",0);
 				for(int i=0;i<code_split.length;i++){
-					if(code_split[i].trim().length()==0){	
+					if(code_split[i].trim().length()==0){
 						column++;
 					}else if(!code_split[i].isEmpty()){
 						tokenList.add(new Tokens(code_split[i],line,column,tokenId++,impId++));
@@ -380,7 +381,7 @@ public class TestHeuristicICCA {
 		}
 		return tokenMap;
 	}
-	
+
 	public static void hasParagraph(ArrayList<Tokens> codeList){
 		for(int i=0;i<codeList.size()-1;i++){
 			if(!Arrays.asList(reservedWords).contains(codeList.get(i).token)&&codeList.get(i+1).token.equals(".")){
@@ -400,16 +401,16 @@ public class TestHeuristicICCA {
 			}
 		}
 	}
-	
+
 	public static boolean CloneIsPackedByLevel(ArrayList<Tokens> tokenList,int level,CloneSet parent,ArrayList<CloneSet> cloneSetList,int fileId,boolean dispersive){
-		if(level>=Greedy) 
+		if(level>=Greedy)
 			return hasSentence(tokenList,parent,cloneSetList,fileId,dispersive);
 		if(level==functionLevel){
 			return hasFunction(tokenList,dispersive);
 		}
 		return false;
 	}
-	
+
 	public static int acrossTheParagraph(int left,ArrayList<Tokens> codeList){
 		if(codeList.size()-left>1){
 			boolean status = codeList.get(left).paragraph;
@@ -427,7 +428,7 @@ public class TestHeuristicICCA {
 		}
 		return -1;
 	}
-	
+
 	public static boolean leapToTheParagraph(ArrayList<Tokens> codeList){
 		if(codeList.size()>0){
 			for(Tokens token : codeList){
@@ -438,7 +439,7 @@ public class TestHeuristicICCA {
 		}
 		return false;
 	}
-	
+
 	public static boolean hasSentence(ArrayList<Tokens> codeList,CloneSet parent,ArrayList<CloneSet> cloneSetList,int fileId,boolean dipersive){
 		hasParagraph(codeList);
 		boolean findSplitClone = false;
@@ -449,7 +450,7 @@ public class TestHeuristicICCA {
 			findSplitClone = true;
 			ArrayList<Tokens> splitCodeList = new ArrayList<Tokens>();
 			for(int i=0;i<=right-left;i++){
-				splitCodeList.add(codeList.get(left+i)); 
+				splitCodeList.add(codeList.get(left+i));
 			}
 			if(hasFunction(splitCodeList,dipersive)){
 				CloneSet cs;
@@ -478,7 +479,7 @@ public class TestHeuristicICCA {
 				.setColumn(codeList.get(left).column, codeList.get(right).column)
 				.setToken(codeList.get(left).tokenId, codeList.get(right).tokenId);
 				scc.getParent().setSourceCodeClone(scc);
-				
+
 				loop++;
 			}
 			left = right + 1;
@@ -487,10 +488,10 @@ public class TestHeuristicICCA {
 		if(findSplitClone){
 			//System.out.println("find");
 			right = codeList.size()-1;
-			//‚ ‚Ü‚è‚Ì•”•ª‚àƒR[ƒhƒNƒ[ƒ“‚Å‚ ‚éD
+			//ï¿½ï¿½ï¿½Ü‚ï¿½Ì•ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Rï¿½[ï¿½hï¿½Nï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½Å‚ï¿½ï¿½ï¿½D
 			ArrayList<Tokens> splitCodeList = new ArrayList<Tokens>();
 			for(int i=0;i<=right-left;i++){
-				splitCodeList.add(codeList.get(left+i)); 
+				splitCodeList.add(codeList.get(left+i));
 			}
 			if(hasFunction(splitCodeList,dipersive)){
 				findSplitClone = true;
@@ -520,7 +521,7 @@ public class TestHeuristicICCA {
 				.setColumn(codeList.get(left).column, codeList.get(right).column)
 				.setToken(codeList.get(left).tokenId, codeList.get(right).tokenId);
 				scc.getParent().setSourceCodeClone(scc);
-				
+
 				loop++;
 			}
 			return false;
@@ -533,7 +534,7 @@ public class TestHeuristicICCA {
 			return false;
 		}
 	}
-	
+
 	public static boolean hasFunction(ArrayList<Tokens> codeList,boolean dispersive){
 		hasParagraph(codeList);
 		if(acrossTheParagraph(0,codeList)<0){
@@ -541,10 +542,10 @@ public class TestHeuristicICCA {
 				return true;
 			}
 		}
-		
+
 		return false;
 	}
-	
+
 	public static int getSLOC(Tokens firstToken){
 		int SLOC =0;
 		Tokens CurrentToken = firstToken;
@@ -558,7 +559,7 @@ public class TestHeuristicICCA {
 			}else if(CurrentToken.isRComment()){
 				comment_out = false;
 			}else if(CurrentToken.line==currentLine||comment_out){
-				
+
 			}else{
 				currentLine = CurrentToken.line;
 				SLOC++;
@@ -566,11 +567,11 @@ public class TestHeuristicICCA {
 			if(CurrentToken.getNextToken()!=null)
 				CurrentToken = CurrentToken.getNextToken();
 			else break;
-			
+
 		}
 		return SLOC;
 	}
-	
+
 	public static int getCLOC(Tokens firstToken){
 		int CLOC = 0;
 		Tokens CurrentToken = firstToken;
@@ -586,7 +587,7 @@ public class TestHeuristicICCA {
 		}
 		return CLOC;
 	}
-	
+
 	public static int getOLOC(Tokens firstToken){
 		int OLOC = 0;
 		Tokens CurrentToken = firstToken;
@@ -602,7 +603,7 @@ public class TestHeuristicICCA {
 		}
 		return OLOC;
 	}
-	
+
 	public static void openCloneSet(ArrayList<String>fileIdList,ArrayList<CloneSet> cloneSetList){
 		switch(level){
 		case Greedy:
@@ -655,7 +656,7 @@ public class TestHeuristicICCA {
 			break;
 		}
 	}
-	
+
 	public static int calcFunctionLevelReduc(ArrayList<CloneSet> cloneSetList){
 		int Reduc = 0;
 		for(CloneSet cs : cloneSetList){
@@ -667,12 +668,12 @@ public class TestHeuristicICCA {
 			int num = cs.getSCloneList().size();
 			if(num>1){
 				Reduc+=(num-1)*(sum/num)-num;
-				
+
 			}
 		}
 		return Reduc;
 	}
-	
+
 	public static int calcSourceLevelReducGreedy(ArrayList<CloneSet> cloneSetList){
 		extractNeighborCloneSet(cloneSetList);
 		int Reduc=0;
@@ -693,9 +694,9 @@ public class TestHeuristicICCA {
 		}
 		return Reduc;
 	}
-	
+
 	public static void extractNeighborCloneSet(ArrayList<CloneSet> cloneSetList){
-		HashMap<Integer,ArrayList<SourceCodeClone>> fileToSCloneMap = createFileToSCloneMap(cloneSetList); 
+		HashMap<Integer,ArrayList<SourceCodeClone>> fileToSCloneMap = createFileToSCloneMap(cloneSetList);
 		identifyOverlap(cloneSetList);
 		for(int fileId:fileToSCloneMap.keySet()){
 			ArrayList<SourceCodeClone> sccList = fileToSCloneMap.get(fileId);
@@ -716,7 +717,7 @@ public class TestHeuristicICCA {
 			}
 		}
 	}
-	
+
 	public static HashMap<Integer,ArrayList<SourceCodeClone>> createFileToSCloneMap(ArrayList<CloneSet>cloneSetList){
 		HashMap<Integer,ArrayList<SourceCodeClone>> fileToSCloneMap = new HashMap<Integer,ArrayList<SourceCodeClone>>();
 		for(CloneSet cs:cloneSetList){
@@ -729,7 +730,7 @@ public class TestHeuristicICCA {
 		}
 		return fileToSCloneMap;
 	}
-	
+
 	public static boolean isOverlap(SourceCodeClone scc1,SourceCodeClone scc2){
 		if((scc1.getTE()-scc2.getTS())*(scc2.getTE()-scc1.getTS())>=0){
 			return true;
@@ -737,7 +738,7 @@ public class TestHeuristicICCA {
 			return false;
 		}
 	}
-	
+
 	public static void clearSCCList(ArrayList<CloneSet> cloneSetList){
 		for(CloneSet cs :cloneSetList){
 			if(cs.getSCloneList().size()>0){
@@ -753,7 +754,7 @@ public class TestHeuristicICCA {
 			}
 		}
 	}
-	
+
 	public static int countNumClone(ArrayList<CloneSet> cloneSetList){
 		int sum = 0;
 		for(CloneSet cs :cloneSetList){
@@ -763,7 +764,7 @@ public class TestHeuristicICCA {
 		}
 		return sum;
 	}
-	
+
 	public static int countNumCloneSet(ArrayList<CloneSet> cloneSetList){
 		int sum = 0;
 		for(CloneSet cs :cloneSetList){
@@ -776,7 +777,7 @@ public class TestHeuristicICCA {
 
 	private static int osId=0;
 	public static HashMap<Integer, OverlapSet> overlapSetMap=new HashMap<Integer,OverlapSet>();
-	
+
 	private static void registerOs(CloneSet cs1,CloneSet cs2){
 		if(cs1.getCloneSetId()!=cs2.getCloneSetId()){
 			if(cs1.overlapSetID==-1&&cs2.overlapSetID==-1){
@@ -800,7 +801,7 @@ public class TestHeuristicICCA {
 			}
 		}
 	}
-	
+
 	public static void HillClimbing(){
 		/*
 		for(HashMap.Entry<Integer, OverlapSet> e : overlapSetMap.entrySet()) {
@@ -829,7 +830,7 @@ public class TestHeuristicICCA {
 						}
 					}
 					os.setList.remove(i);
-					
+
 				}else{
 					i++;
 				}
@@ -854,7 +855,7 @@ public class TestHeuristicICCA {
 			}
 		}
 	}
-	
+
 	public static int calcReduc(ArrayList<CloneSet> cloneSetList){
 		int Reduc = 0;
 		for(CloneSet cs : cloneSetList){
@@ -867,7 +868,7 @@ public class TestHeuristicICCA {
 		}
 		return Reduc;
 	}
-	
+
 	public static void climbing(OverlapSet os){
 		int n = os.setList.size();
 		while(true){
@@ -909,10 +910,10 @@ public class TestHeuristicICCA {
 
 	private static int MAX_ITER=2000;
 	private static float ALPHA = (float)0.5;
-	
+
 	public static void SimulatedAnnealing(int iter,float alpha){
 		//System.out.println("start simulated annealing");
-		
+
 		if(iter>0){
 			MAX_ITER=iter;
 		}
@@ -921,7 +922,7 @@ public class TestHeuristicICCA {
 		}
 		for(HashMap.Entry<Integer, OverlapSet> e : overlapSetMap.entrySet()) {
 			OverlapSet os = e.getValue();
-			/*©g‚Æd•¡‚·‚éƒNƒ[ƒ“ƒZƒbƒg‚ğ”rœ‚·‚é*/
+			/*ï¿½ï¿½ï¿½gï¿½Ædï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½Zï¿½bï¿½gï¿½ï¿½rï¿½ï¿½ï¿½ï¿½ï¿½ï¿½*/
 			/*
 			for(int i=0;i<os.setList.size();){
 				CloneSet cs1 = os.setList.get(i);
@@ -967,7 +968,7 @@ public class TestHeuristicICCA {
 			}
 		}
 	}
-	
+
 	private static void annealing(OverlapSet os){
 		int n = os.setList.size();
 		if(n<2) return;
@@ -995,7 +996,7 @@ public class TestHeuristicICCA {
 				}
 				os.bestVector = nextVec;
 				os.bestEval = nextEval;
-				/*GOAL_E‚Æ‚Ì”äŠr‚ğ‹Lq‚·‚é‚È‚ç‚±‚±*/
+				/*GOAL_Eï¿½Æ‚Ì”ï¿½rï¿½ï¿½ï¿½Lï¿½qï¿½ï¿½ï¿½ï¿½È‚ç‚±ï¿½ï¿½*/
 			}
 			if(Math.random()<=probability(e,nextEval,temperature(iter/MAX_ITER))){
 				//matrix = nextMatrix.clone();
@@ -1008,7 +1009,7 @@ public class TestHeuristicICCA {
 			}
 		}
 	}
-	
+
 	private static float probability(int e1,int e2,float t){
 		if(e1>=e2){
 			return 1;
@@ -1016,11 +1017,11 @@ public class TestHeuristicICCA {
 			return (float) Math.pow(Math.E,(e1-e2)/t);
 		}
 	}
-	
+
 	private static float temperature(float r){
 		return (float) Math.pow(ALPHA,r);
 	}
-	
+
 	public static void GeneticAlgorithmMain(int Iter){
 		InputStream input = GeneticAlgorithm.class.getResourceAsStream(
 				"interMediate");
@@ -1073,17 +1074,17 @@ public class TestHeuristicICCA {
 			.run();
 		}
 	}
-	
+
 	static void startTimer(){
 		start = System.currentTimeMillis();
-		
+
 	}
-	
+
 	static long endTimer(){
 		long end = System.currentTimeMillis();
 		return end - start;
 	}
-	
+
 	static void identifyOverlap(ArrayList<CloneSet> cloneSetList){
 		for(CloneSet cs : cloneSetList){
 			boolean find = false;
@@ -1092,7 +1093,7 @@ public class TestHeuristicICCA {
 					SourceCodeClone scc1 = cs.getSCloneList().get(i);
 					SourceCodeClone scc2 = cs.getSCloneList().get(j);
 					if(scc1.getFileId()==scc2.getFileId()&&isOverlap(scc1,scc2)){
-						find = true;			
+						find = true;
 					}
 				}
 			}
@@ -1101,7 +1102,7 @@ public class TestHeuristicICCA {
 			}
 		}
 	}
-	
+
 	public static void convert(String file,ArrayList<String> fileList,ArrayList<CloneSet> cloneSetList){
 		PrintWriter pw = getPrintWriter(new File(file));
 		pw.println("#begin{file description}");
@@ -1124,7 +1125,7 @@ public class TestHeuristicICCA {
 		pw.println("#end{clone}");
 		pw.close();
 	}
-	
+
 	public static PrintWriter getPrintWriter(File output){
 		try{
 			return new PrintWriter(new BufferedWriter(new FileWriter(output,false)));

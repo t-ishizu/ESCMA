@@ -1,6 +1,8 @@
-package jp.ac.osaka.u.ist.t_ishizu.TestHeuristicICCA;
+package jp.ac.osaka.u.ist.t_ishizu.ESCMA_COBOL;
 
 import java.util.ArrayList;
+
+
 
 public class CodeClone {
 	private int fileId;
@@ -17,17 +19,17 @@ public class CodeClone {
 	private boolean packed = false;
 	private int LNR;
 	public CodeClone(){
-		
+
 	}
 	public CodeClone setFileId(int id){
 		fileId = id;
 		return this;
 	}
-	
+
 	public int getFileId(){
 		return fileId;
 	}
-	
+
 	public CodeClone setLine(int ls,int le){
 		LS = ls;
 		LE = le;
@@ -68,12 +70,12 @@ public class CodeClone {
 	public CloneSet getParent(){
 		return parent;
 	}
-	
+
 	public CodeClone setCloneSetId(int id){
 		cloneSetId = id;
 		return this;
 	}
-	
+
 	public int getCloneSetId(){
 		return cloneSetId;
 	}
@@ -92,28 +94,28 @@ public class CodeClone {
 	public ArrayList<CodeClone> getNeighbors(){
 		return neighbors;
 	}
-	
+
 	public void getPainted(){
 		painted = true;
 	}
-	
+
 	public void getPacked(){
 		packed = true;
 	}
-	
+
 	public boolean isPainted(){
 		return painted;
 	}
-	
+
 	public boolean isPacked(){
 		return packed;
 	}
-	
+
 	public CodeClone setLNR(int lnr){
 		this.LNR = lnr;
 		return this;
 	}
-	
+
 	public int getLNR(){
 		return LNR;
 	}

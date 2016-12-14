@@ -1,13 +1,14 @@
-package jp.ac.osaka.u.ist.t_ishizu.TestHeuristicICCA;
+package jp.ac.osaka.u.ist.t_ishizu.ESCMA_COBOL;
 
 import java.util.Comparator;
 
+
 public class TokenSizeComparator implements Comparator<CloneSet>{
-	/*~‡‚É•À‚×‚é*/
+	/*ï¿½~ï¿½ï¿½ï¿½É•ï¿½ï¿½×‚ï¿½*/
 	public int compare(CloneSet cs1,CloneSet cs2){
 		int totalToken1 = cs1.getReduc();
 		int totalToken2 = cs2.getReduc();
-		
+
 		if(totalToken1>totalToken2){
 			return -1;
 		}else if(totalToken1==totalToken2){

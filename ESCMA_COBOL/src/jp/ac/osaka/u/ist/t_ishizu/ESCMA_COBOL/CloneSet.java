@@ -1,6 +1,8 @@
-package jp.ac.osaka.u.ist.t_ishizu.TestHeuristicICCA;
+package jp.ac.osaka.u.ist.t_ishizu.ESCMA_COBOL;
 
 import java.util.ArrayList;
+
+
 
 public class CloneSet {
 	private ArrayList<CodeClone> cloneList = new ArrayList<CodeClone>();
@@ -13,8 +15,8 @@ public class CloneSet {
 	private int RNR=-1;
 	public int osIndex = -1;
 	public int overlapSetID = -1;
-	public boolean dispersive = false;//ƒtƒ@ƒCƒ‹ŠÔ‚ÉƒNƒ[ƒ“‚ª•ªU‚µ‚Ä‚¢‚é‚©
-	
+	public boolean dispersive = false;//ï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½Ô‚ÉƒNï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Uï¿½ï¿½ï¿½Ä‚ï¿½ï¿½é‚©
+
 	public ArrayList<Integer> splitCloneIdList = new ArrayList<Integer>();
 	public int alpha;
 	public int beta;
@@ -24,24 +26,24 @@ public class CloneSet {
 	public void setClone(CodeClone c){
 		cloneList.add(c);
 	}
-	
+
 	public void allPainted(){
 		for(CodeClone c:cloneList){
 			c.getPainted();
 		}
 	}
-	
+
 	public void allPacked(){
 		for(CodeClone c:cloneList){
 			c.getPacked();
 		}
 		packed = true;
 	}
-	
+
 	public void open(){
 		packed = false;
 	}
-	
+
 	public void setPainted(){
 		this.painted=true;
 	}
@@ -51,29 +53,29 @@ public class CloneSet {
 	public boolean isPacked(){
 		return packed;
 	}
-	
+
 	public CloneSet setCloneSetId(int id){
 		cloneSetId = id;
 		return this;
 	}
-	
+
 	public int getCloneSetId(){
 		return cloneSetId;
 	}
-	
+
 	public ArrayList<SourceCodeClone> getSCloneList(){
 		return sCloneList;
 	}
-	
+
 	public SourceCodeClone setSourceCodeClone(SourceCodeClone scc){
 		sCloneList.add(scc);
 		return scc;
 	}
-	
+
 	public ArrayList<CloneSet> getNeighborCloneSet(){
 		return this.neighborCloneSet;
 	}
-	
+
 	public boolean contains(CloneSet cs1){
 		for(CloneSet cs2:neighborCloneSet){
 			if(cs1.getCloneSetId()==cs2.getCloneSetId()){
@@ -82,7 +84,7 @@ public class CloneSet {
 		}
 		return false;
 	}
-	
+
 	public void calcReduc(){
 		Reduc = 0;
 		int num = sCloneList.size();
@@ -108,19 +110,19 @@ public class CloneSet {
 		for(SourceCodeClone scs:sCloneList){
 			sum+=scs.getNumberOfLines();
 		}
-		
+
 		if(num>1){
 			Reduc=(num-1)*(sum/num)-num-2;
 			//Reduc=(num-1)*(sum/num)-num;
-			
+
 		}
 		*/
 	}
-	
+
 	public int getReduc(){
 		return Reduc;
 	}
-	
+
 	public int calcRNR(){
 		int totalLNR=0;
 		int tokenLength=0;
@@ -133,11 +135,11 @@ public class CloneSet {
 		//System.out.println(100*totalLNR/tokenLength);
 		return 100*totalLNR/tokenLength;
 	}
-	
+
 	public void setRNR(){
 		this.RNR = calcRNR();
 	}
-	
+
 	public int getRNR(){
 		return RNR;
 	}

@@ -1,13 +1,14 @@
-package jp.ac.osaka.u.ist.t_ishizu.TestHeuristicICCA;
+package jp.ac.osaka.u.ist.t_ishizu.ESCMA_COBOL;
 
 import java.util.ArrayList;
 
+
 public class Method {
 	public static void initialized(int[][] matrix,int[] vector,OverlapSet os){
-		/*R“o‚è–@‚É‚¨‚¯‚é‰Šúó‘Ô*/
+		/*ï¿½Rï¿½oï¿½ï¿½@ï¿½É‚ï¿½ï¿½ï¿½ï¿½é‰ï¿½ï¿½ï¿½ï¿½ï¿½*/
 		int n = vector.length;
 		for(int i=0;i<n;i++){
-			/*‘ÎŠp¬•ª‚Í–„‚ß‚é*/
+			/*ï¿½ÎŠpï¿½ï¿½ï¿½ï¿½ï¿½Í–ï¿½ï¿½ß‚ï¿½*/
 			matrix[i][i]=-1;
 			for(CloneSet cs : os.setList.get(i).getNeighborCloneSet()){
 				boolean find = false;
@@ -22,8 +23,8 @@ public class Method {
 				matrix[i][index]=-1;
 			}
 		}
-		
-		
+
+
 		for(int i=0;i<n;i++){
 			boolean find = false;
 			for(int j=0;j<n;j++){
@@ -57,18 +58,18 @@ public class Method {
 					if(matrix[j][i]==-1)
 						matrix[j][i]=1;
 				}
-				
+
 			}*/
 		}
 		for(int i=0;i<n;i++){
 			vector[i] = matrix[i][i];
 		}
 	}
-	
+
 	public static int evalVec(int[] vec,OverlapSet os){
 		int n = vec.length;
 		if(n<1) return 0;
-		
+
 		int eval=0;
 		for(int i=0;i<n;i++){
 			if(vec[i]==1){
@@ -77,9 +78,9 @@ public class Method {
 		}
 		return eval;
 	}
-	
+
 	public static ArrayList<int[][]> neighbors(int[][] nextMatrix,int k){
-		/*k”Ô–Ú‚ÌƒNƒ[ƒ“ƒZƒbƒg‚ªW–ñ‚³‚ê‚Ä‚¢‚È‚¯‚ê‚ÎAW–ñ‚·‚é*/
+		/*kï¿½Ô–Ú‚ÌƒNï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½Zï¿½bï¿½gï¿½ï¿½ï¿½Wï¿½ñ‚³‚ï¿½Ä‚ï¿½ï¿½È‚ï¿½ï¿½ï¿½ÎAï¿½Wï¿½ñ‚·‚ï¿½*/
 		int n = nextMatrix[k].length;
 		ArrayList<int[][]> neighborList = new ArrayList<int[][]>();
 		if(nextMatrix[k][k]==-1){
@@ -99,8 +100,8 @@ public class Method {
 					nextMatrix[i][k]=1;
 				}
 			}
-			/*‚±‚±‚©‚ç§–ñ‚Ìó‚¯‚Ä‚¢‚È‚¢ƒNƒ[ƒ“ƒZƒbƒg‚ğ’Tõ‚·‚é*/
-			int currentIndex = refactorAll(nextMatrix,n,0);  
+			/*ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ç§ï¿½ï¿½Ìó‚¯‚Ä‚ï¿½ï¿½È‚ï¿½ï¿½Nï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½Zï¿½bï¿½gï¿½ï¿½Tï¿½ï¿½ï¿½ï¿½ï¿½ï¿½*/
+			int currentIndex = refactorAll(nextMatrix,n,0);
 			if(currentIndex!=-1){
 				branch(neighborList,nextMatrix,n,currentIndex);
 			}else{
@@ -111,7 +112,7 @@ public class Method {
 		}
 		return neighborList;
 	}
-	
+
 	static int  refactorAll(int[][] matrix,int n,int k){
 		for(int i=k;i<n;i++){
 			boolean find = false;
@@ -122,14 +123,14 @@ public class Method {
 				}
 			}
 			if(find){
-				
+
 			}else{
 				return i;
 			}
 		}
 		return -1;
 	}
-	
+
 	static void  branch(ArrayList<int[][]> list,int[][] matrix,int n,int k){
 		int[][] matrixOriginal = matrix.clone();
 		for(int i=0;i<n;i++){

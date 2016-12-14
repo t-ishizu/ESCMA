@@ -1,4 +1,4 @@
-package jp.ac.osaka.u.ist.t_ishizu.TestHeuristicICCA;
+package jp.ac.osaka.u.ist.t_ishizu.ESCMA_COBOL;
 
 import java.io.File;
 import java.io.FileReader;
@@ -6,12 +6,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.util.ArrayList;
 
 import org.moeaframework.core.Problem;
 import org.moeaframework.core.Solution;
 import org.moeaframework.core.variable.EncodingUtils;
-import org.moeaframework.util.Vector;
 
 public class GeneticAlgorithm implements Problem{
 	private int iterateIndex;
@@ -19,35 +17,35 @@ public class GeneticAlgorithm implements Problem{
 	private int nitems;
 	private int[][] profit;
 	//private int[][] weight;
-	
-	
+
+
 	public GeneticAlgorithm(File file)throws IOException{
 		this(new FileReader(file));
 	}
-	
+
 	public GeneticAlgorithm(InputStream inputStream)throws IOException{
 		this(new InputStreamReader(inputStream));
 	}
-	
+
 	public GeneticAlgorithm(Reader reader) throws IOException{
 		super();
-		
+
 		load(reader);
 	}
-	
+
 	private void load(Reader reader) throws IOException{
 		//System.out.println("index " +CloneRefactoring.iterateIndex);
-		this.iterateIndex = TestHeuristicICCA.iterateIndex;
-		nitems = TestHeuristicICCA.overlapSetMap.get(iterateIndex).setList.size();
-		TestHeuristicICCA.overlapSetMap.get(iterateIndex).indexReset();
+		this.iterateIndex = ESCMA_COBOL.iterateIndex;
+		nitems = ESCMA_COBOL.overlapSetMap.get(iterateIndex).setList.size();
+		ESCMA_COBOL.overlapSetMap.get(iterateIndex).indexReset();
 	}
-	
+
 	@Override
 	public void evaluate(Solution solution) {
 		boolean[] d = EncodingUtils.getBinary(solution.getVariable(0));
 		double[] f = new double[nsacks];
 		//int[] check = new int[nitems];
-		OverlapSet CloneSetList = TestHeuristicICCA.overlapSetMap.get(iterateIndex);
+		OverlapSet CloneSetList = ESCMA_COBOL.overlapSetMap.get(iterateIndex);
 		for(int i=0;i<nitems;i++){
 			if(d[i]){
 				CloneSet cs = CloneSetList.setList.get(i);
@@ -64,7 +62,7 @@ public class GeneticAlgorithm implements Problem{
 					f[0]+=cs.getReduc();
 			}
 		}
-		
+
 		for(int i=0;i<nitems;i++){
 			if(!d[i]){
 				boolean find = false;
@@ -77,10 +75,10 @@ public class GeneticAlgorithm implements Problem{
 				if(!find){
 					d[i] = true;
 					f[0]+=CloneSetList.setList.get(i).getReduc();
-				}	
+				}
 			}
 		}
-		
+
 		if(f[0]>CloneSetList.bestEval){
 			CloneSetList.bestEval=(int) f[0];
 			for(int i=0;i<nitems;i++){
@@ -91,9 +89,9 @@ public class GeneticAlgorithm implements Problem{
 				}
 			}
 		}
-			
+
 	}
-	
+
 	@Override
 	public String getName() {
 		return "GeneticAlgorithm";
@@ -114,7 +112,7 @@ public class GeneticAlgorithm implements Problem{
 		return 0;
 	}
 
-	
+
 
 	@Override
 	public Solution newSolution() {
@@ -126,7 +124,7 @@ public class GeneticAlgorithm implements Problem{
 	@Override
 	public void close() {
 		// do nothing
-		
+
 	}
 
 }
