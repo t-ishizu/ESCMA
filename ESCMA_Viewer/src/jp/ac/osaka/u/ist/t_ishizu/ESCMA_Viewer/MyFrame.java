@@ -3,8 +3,6 @@ package jp.ac.osaka.u.ist.t_ishizu.ESCMA_Viewer;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -27,7 +25,6 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JPanel;
-import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextArea;
@@ -37,7 +34,7 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.border.TitledBorder;
 
 import jp.ac.osaka.u.ist.t_ishizu.CCM_OutputTrans.CCM_OutputTrans;
-import jp.ac.osaka.u.ist.t_ishizu.TestHeuristicICCA.TestHeuristicICCA;
+import jp.ac.osaka.u.ist.t_ishizu.ESCMA_COBOL.ESCMA_COBOL;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -59,9 +56,9 @@ public class MyFrame extends JFrame implements ActionListener{
 	public ArrayList<String> fileIdList;
 	public ArrayList<String> CCMfileIdList;
 	public HashMap<Integer,ArrayList<jp.ac.osaka.u.ist.t_ishizu.CCM_OutputTrans.CodeClone>> CCMfileToCloneMap;
-	public ArrayList<jp.ac.osaka.u.ist.t_ishizu.TestHeuristicICCA.CloneSet> cloneSetList;
+	public ArrayList<jp.ac.osaka.u.ist.t_ishizu.ESCMA_COBOL.CloneSet> cloneSetList;
 	public ArrayList<jp.ac.osaka.u.ist.t_ishizu.CCM_OutputTrans.CloneSet> CCMcloneSetList;
-	public HashMap<Integer,ArrayList<jp.ac.osaka.u.ist.t_ishizu.TestHeuristicICCA.CodeClone>>fileToCloneMap;
+	public HashMap<Integer,ArrayList<jp.ac.osaka.u.ist.t_ishizu.ESCMA_COBOL.CodeClone>>fileToCloneMap;
 	public HashMap<Integer,CodeSnipets> snipetsMap;
 	public File clonePairFile;
 	public File FunctionsA;
@@ -73,26 +70,26 @@ public class MyFrame extends JFrame implements ActionListener{
 	    contentPane = getContentPane();
 	    contentPane.add(getDefPanel());
 	    setVisible(true);
-	    
+
 	}
-	
+
 	public JButton createButton(String title,String command){
 		JButton button = new JButton(title);
 		button.setActionCommand(command);
 		button.addActionListener(this);
 		return button;
 	}
-	
+
 	public JPanel getDefPanel(){
 		JPanel panel = new JPanel();
 		panel.add(createButton("新たなコードクローンの集約","1"));
 		panel.add(createButton("ESCMA集約結果の表示","2"));
 		panel.add(createButton("CCM集約結果の表示","8"));
 	    return panel;
-		
+
 	}
-	
-	
+
+
 	public JPanel getSelectDirectryPanel(){
 		JPanel panel = new JPanel();
 		JTextField textbox = new JTextField();
@@ -106,7 +103,7 @@ public class MyFrame extends JFrame implements ActionListener{
 		panel.add(createButton("戻る","0"));
 		return panel;
 	}
-	
+
 	public JPanel getSelectFilePanel(){
 		JPanel panel = new JPanel();
 		JTextField textbox = new JTextField();
@@ -120,7 +117,7 @@ public class MyFrame extends JFrame implements ActionListener{
 		panel.add(createButton("戻る","0"));
 		return panel;
 	}
-	
+
 	public JPanel getSelectTwoFilePanel(){
 		JPanel panel = new JPanel();
 		JTextField textbox = new JTextField();
@@ -134,7 +131,7 @@ public class MyFrame extends JFrame implements ActionListener{
 		panel.add(createButton("戻る","0"));
 		return panel;
 	}
-	
+
 	public JPanel getSelectThreeFilePanel(){
 		JPanel panel = new JPanel();
 		JTextField textbox = new JTextField();
@@ -148,7 +145,7 @@ public class MyFrame extends JFrame implements ActionListener{
 		panel.add(createButton("戻る","0"));
 		return panel;
 	}
-	
+
 	public JPanel getFileListPanel(){
 		//選択されたフォルダ下に特定の拡張子を持つファイルが1つ以上存在するのか確認する．
 		cobolFileList = new ArrayList<File>();
@@ -159,7 +156,7 @@ public class MyFrame extends JFrame implements ActionListener{
 				cobolFileList.add(files[i]);
 			}
 		}
-		
+
 		JPanel panel = new JPanel();
 		JTextArea textArea = new JTextArea(file.getPath());
 		//textArea.setBorder(new TitledBorder("選択されたフォルダパス"));
@@ -187,7 +184,7 @@ public class MyFrame extends JFrame implements ActionListener{
 		panel.add(createButton("戻る","1"));
 		return panel;
 	}
-	
+
 	public JPanel getOptionPanel(){
 		JPanel panel = new JPanel();
 		//SpinnerNumberModel model_Size = new SpinnerNumberModel(10,10,200,10);
@@ -198,7 +195,7 @@ public class MyFrame extends JFrame implements ActionListener{
 		JSpinner spinner_RNR = new JSpinner(model_RNR);
 		spinner_RNR.setPreferredSize(new Dimension(100,40));
 		panel.add(spinner_RNR);
-		
+
 		JTextField textbox = new JTextField();
 		textbox.setBorder(new TitledBorder("CCFinderXのファイルパス"));
 		textbox.setPreferredSize(new Dimension(400, 40));
@@ -210,13 +207,13 @@ public class MyFrame extends JFrame implements ActionListener{
 		panel.add(createButton("戻る","3"));
 		return panel;
 	}
-	
+
 	public JPanel getViewerPanel(){
 		/*コードクローンの情報の初期化*/
-		fileIdList = TestHeuristicICCA.createFileIdList(file.getPath());
-		cloneSetList = TestHeuristicICCA.createCloneSetList(file.getPath());
-		fileToCloneMap = TestHeuristicICCA.createFileToCloneMap(cloneSetList);
-		
+		fileIdList = ESCMA_COBOL.createFileIdList(file.getPath());
+		cloneSetList = ESCMA_COBOL.createCloneSetList(file.getPath());
+		fileToCloneMap = ESCMA_COBOL.createFileToCloneMap(cloneSetList);
+
 //		String[] nums1 = new String[cloneSetList.size()];
 //		for(int i=0;i<cloneSetList.size();i++){
 //			nums1[i]=String.valueOf(i+1);
@@ -230,24 +227,24 @@ public class MyFrame extends JFrame implements ActionListener{
 		JScrollPane scrollPanel_list1 = new JScrollPane();
 		JViewport view1 = scrollPanel_list1.getViewport();
 		view1.setView(list1);
-		
+
 //		String[] nums2 = new String[cloneSetList.get(0).getCloneList().size()];
 //		for(int i=0;i<cloneSetList.get(0).getCloneList().size();i++){
 //			nums2[i]=String.valueOf(i+1);
 //		}
 		listModel2 = new DefaultListModel<String>();
 		for(int i=0;i<cloneSetList.get(0).getCloneList().size();i++){
-			jp.ac.osaka.u.ist.t_ishizu.TestHeuristicICCA.CodeClone c = cloneSetList.get(0).getCloneList().get(i);
+			jp.ac.osaka.u.ist.t_ishizu.ESCMA_COBOL.CodeClone c = cloneSetList.get(0).getCloneList().get(i);
 			String str2 = (i+1)+" 0."+c.getFileId()+" "+c.getLS()+","+c.getCS()+","+c.getTS()+" "+c.getLE()+","+c.getCE()+","+c.getTE();
 			listModel2.addElement(str2);
 		}
 		JList<String> list2 = new JList<String>(listModel2);
 		JScrollPane scrollPanel_list2 = new JScrollPane();
 		scrollPanel_list2.getViewport().setView(list2);
-		
-		
+
+
 		JPanel mainPanel = new JPanel();
-		
+
 		html1 = "<html>"+"<body><h1>Kitty on your lap</h1>"+"</html>";
 		JEditorPane viewPanel1 = new JEditorPane("text/html",html1);
 		JScrollPane scrollPanel_viewer1 = new JScrollPane(viewPanel1);
@@ -255,11 +252,11 @@ public class MyFrame extends JFrame implements ActionListener{
 		//JViewport viewport1 = scrollPanel_viewer1.getViewport();
 		//viewport1.setView(viewPanel1);
 		scrollPanel_viewer1.setPreferredSize(new Dimension(400,600));
-		
+
 		//JTextArea area1 = new JTextArea();
 		//JScrollPane scrollPanel1 = new JScrollPane(area1);
 		//viewPanel1.add(scrollPanel1);
-		
+
 		html2 = "<html>"+"<body><h1>Kitty on your lap</h1>"+"</html>";
 		JEditorPane viewPanel2 = new JEditorPane("text/html",html2);
 		JScrollPane scrollPanel_viewer2 = new JScrollPane();
@@ -269,7 +266,7 @@ public class MyFrame extends JFrame implements ActionListener{
 		//JTextArea area2 = new JTextArea();
 		//JScrollPane scrollPanel2 = new JScrollPane(area2);
 		//viewPanel1.add(scrollPanel2);
-		
+
 		JPanel selectPanel = new JPanel();
 		selectPanel.add(scrollPanel_list1);
 		CloneSetSelected css = new CloneSetSelected(list1,list2,viewPanel1);
@@ -280,15 +277,15 @@ public class MyFrame extends JFrame implements ActionListener{
 		selectPanel.add(new JButton(ccs));
 		JPanel ButtonPanel = new JPanel();
 		ButtonPanel.add(createButton("戻る","2"));
-		
-		
+
+
 		mainPanel.add(scrollPanel_viewer1,BorderLayout.WEST);
 		mainPanel.add(scrollPanel_viewer2,BorderLayout.CENTER);
 		mainPanel.add(selectPanel,BorderLayout.EAST);
 		mainPanel.add(ButtonPanel,BorderLayout.SOUTH);
 		return mainPanel;
 	}
-	
+
 	public JPanel getCCMViewerPanel(){
 		/*コードクローンの情報の初期化*/
 		CCMfileIdList = CCM_OutputTrans.createFileIdList(clonePairFile.getPath());
@@ -306,7 +303,7 @@ public class MyFrame extends JFrame implements ActionListener{
 		JScrollPane scrollPanel_list1 = new JScrollPane();
 		JViewport view1 = scrollPanel_list1.getViewport();
 		view1.setView(list1);
-		
+
 //		String[] nums2 = new String[cloneSetList.get(0).getCloneList().size()];
 //		for(int i=0;i<cloneSetList.get(0).getCloneList().size();i++){
 //			nums2[i]=String.valueOf(i+1);
@@ -320,10 +317,10 @@ public class MyFrame extends JFrame implements ActionListener{
 		JList<String> list2 = new JList<String>(listModel2);
 		JScrollPane scrollPanel_list2 = new JScrollPane();
 		scrollPanel_list2.getViewport().setView(list2);
-		
-		
+
+
 		JPanel mainPanel = new JPanel();
-		
+
 		html1 = "<html>"+"<body><h1>Kitty on your lap</h1>"+"</html>";
 		JEditorPane viewPanel1 = new JEditorPane("text/html",html1);
 		JScrollPane scrollPanel_viewer1 = new JScrollPane(viewPanel1);
@@ -331,11 +328,11 @@ public class MyFrame extends JFrame implements ActionListener{
 		//JViewport viewport1 = scrollPanel_viewer1.getViewport();
 		//viewport1.setView(viewPanel1);
 		scrollPanel_viewer1.setPreferredSize(new Dimension(400,600));
-		
+
 		//JTextArea area1 = new JTextArea();
 		//JScrollPane scrollPanel1 = new JScrollPane(area1);
 		//viewPanel1.add(scrollPanel1);
-		
+
 		html2 = "<html>"+"<body><h1>Kitty on your lap</h1>"+"</html>";
 		JEditorPane viewPanel2 = new JEditorPane("text/html",html2);
 		JScrollPane scrollPanel_viewer2 = new JScrollPane();
@@ -345,7 +342,7 @@ public class MyFrame extends JFrame implements ActionListener{
 		//JTextArea area2 = new JTextArea();
 		//JScrollPane scrollPanel2 = new JScrollPane(area2);
 		//viewPanel1.add(scrollPanel2);
-		
+
 		JPanel selectPanel = new JPanel();
 		selectPanel.add(scrollPanel_list1);
 		CCMCloneSetSelected css = new CCMCloneSetSelected(list1,list2,viewPanel1);
@@ -356,15 +353,15 @@ public class MyFrame extends JFrame implements ActionListener{
 		selectPanel.add(new JButton(ccs));
 		JPanel ButtonPanel = new JPanel();
 		ButtonPanel.add(createButton("戻る","2"));
-		
-		
+
+
 		mainPanel.add(scrollPanel_viewer1,BorderLayout.WEST);
 		mainPanel.add(scrollPanel_viewer2,BorderLayout.CENTER);
 		mainPanel.add(selectPanel,BorderLayout.EAST);
 		mainPanel.add(ButtonPanel,BorderLayout.SOUTH);
 		return mainPanel;
 	}
-	
+
 	public HashMap<Integer,CodeSnipets> createSnipetsMap(){
 		HashMap<Integer,CodeSnipets> snipetsMap = new HashMap<Integer,CodeSnipets>();
 		BufferedReader br = getBufferedReader(FunctionsA.toString());
@@ -397,12 +394,12 @@ public class MyFrame extends JFrame implements ActionListener{
 				str = br.readLine();
 			}
 		} catch (IOException e) {
-			
+
 			e.printStackTrace();
 		}
 		return snipetsMap;
 	}
-	
+
 	public String getSuffix(String fileName) {
 	    if (fileName == null)
 	        return null;
@@ -412,7 +409,7 @@ public class MyFrame extends JFrame implements ActionListener{
 	    }
 	    return fileName;
 	}
-	
+
 	public String[] toArr(ArrayList<File> list){
         // List<Integer> -> int[]
         int l = list.size();
@@ -422,7 +419,7 @@ public class MyFrame extends JFrame implements ActionListener{
         }
         return arr;
     }
-	
+
 	private class DirectryDialog extends AbstractAction{
 		private JTextField textbox;
 		private JButton next;
@@ -431,7 +428,7 @@ public class MyFrame extends JFrame implements ActionListener{
 			this.textbox = textbox;
 			this.next = next;
 		}
-		
+
 		@Override
 		public void actionPerformed(ActionEvent e){
 			JFileChooser chooser = new JFileChooser();
@@ -444,7 +441,7 @@ public class MyFrame extends JFrame implements ActionListener{
 			}
 		}
 	}
-	
+
 	private class FileDialog extends AbstractAction{
 		private JTextField textbox;
 		JButton next;
@@ -453,7 +450,7 @@ public class MyFrame extends JFrame implements ActionListener{
 			this.textbox = textbox;
 			this.next = next;
 		}
-		
+
 		@Override
 		public void actionPerformed(ActionEvent e){
 			JFileChooser chooser = new JFileChooser();
@@ -475,7 +472,7 @@ public class MyFrame extends JFrame implements ActionListener{
 			this.textbox = textbox;
 			this.next = next;
 		}
-		
+
 		@Override
 		public void actionPerformed(ActionEvent e){
 			JFileChooser chooser = new JFileChooser();
@@ -488,7 +485,7 @@ public class MyFrame extends JFrame implements ActionListener{
 			}
 		}
 	}
-	
+
 	private class FunctionsAFileDialog extends AbstractAction{
 		private JTextField textbox;
 		JButton next;
@@ -497,7 +494,7 @@ public class MyFrame extends JFrame implements ActionListener{
 			this.textbox = textbox;
 			this.next = next;
 		}
-		
+
 		@Override
 		public void actionPerformed(ActionEvent e){
 			JFileChooser chooser = new JFileChooser();
@@ -510,7 +507,7 @@ public class MyFrame extends JFrame implements ActionListener{
 			}
 		}
 	}
-	
+
 	private class CCFinderDialog extends AbstractAction{
 		private JTextField textbox;
 		JButton next;
@@ -519,7 +516,7 @@ public class MyFrame extends JFrame implements ActionListener{
 			this.textbox = textbox;
 			this.next = next;
 		}
-		
+
 		@Override
 		public void actionPerformed(ActionEvent e){
 			JFileChooser chooser = new JFileChooser();
@@ -533,7 +530,7 @@ public class MyFrame extends JFrame implements ActionListener{
 			}
 		}
 	}
-	
+
 	private class CloneSetSelected extends AbstractAction{
 		private JList<String> SetJList;
 		private JList<String> cloneJList;
@@ -545,35 +542,35 @@ public class MyFrame extends JFrame implements ActionListener{
 			this.cloneJList = cloneList;
 			this.editPane = edit;
 		}
-		
-		
+
+
 		@Override
 		public void actionPerformed(ActionEvent e){
 			int index = SetJList.getSelectedIndex();
 			if(index>-1){
-				jp.ac.osaka.u.ist.t_ishizu.TestHeuristicICCA.CloneSet cs = cloneSetList.get(index);
+				jp.ac.osaka.u.ist.t_ishizu.ESCMA_COBOL.CloneSet cs = cloneSetList.get(index);
 				String[] nums = new String[cs.getCloneList().size()];
 				for(int i=0;i<nums.length;i++){
 					nums[i]=String.valueOf(i+1);
 				}
 				listModel2.clear();
 				for(int i=0;i<nums.length;i++){
-					jp.ac.osaka.u.ist.t_ishizu.TestHeuristicICCA.CodeClone c = cs.getCloneList().get(i);
+					jp.ac.osaka.u.ist.t_ishizu.ESCMA_COBOL.CodeClone c = cs.getCloneList().get(i);
 					String str2 = (i+1)+" 0."+c.getFileId()+" "+c.getLS()+","+c.getCS()+","+c.getTS()+" "+c.getLE()+","+c.getCE()+","+c.getTE();
 					listModel2.addElement(str2);
 				}
 				obj.setId(cs.getCloneSetId());
-				
+
 			}
 		}
-		
-		
-		
+
+
+
 		public void setSelected(CodeCloneSelected ccs){
 			obj = ccs;
 		}
 	}
-	
+
 	private class CCMCloneSetSelected extends AbstractAction{
 		private JList<String> SetJList;
 		private JList<String> cloneJList;
@@ -585,8 +582,8 @@ public class MyFrame extends JFrame implements ActionListener{
 			this.cloneJList = cloneList;
 			this.editPane = edit;
 		}
-		
-		
+
+
 		@Override
 		public void actionPerformed(ActionEvent e){
 			int index = SetJList.getSelectedIndex();
@@ -603,14 +600,14 @@ public class MyFrame extends JFrame implements ActionListener{
 					listModel2.addElement(str2);
 				}
 				obj.setId(cs.getCloneSetId());
-				
+
 			}
 		}
 		public void setSelected(CCMCodeCloneSelected ccs){
 			obj = ccs;
 		}
 	}
-	
+
 	private class CodeCloneSelected extends AbstractAction{
 		private JList<String> cloneJList;
 		private JEditorPane editPane1;
@@ -627,13 +624,13 @@ public class MyFrame extends JFrame implements ActionListener{
 		public void setId(int id){
 			cloneSetId = id;
 		}
-		
+
 		@Override
 		public void actionPerformed(ActionEvent e){
 			int cloneId = cloneJList.getSelectedIndex();
 			if(cloneId>-1&&cloneSetId>-1){
-				ArrayList<jp.ac.osaka.u.ist.t_ishizu.TestHeuristicICCA.CodeClone> cloneList = fileToCloneMap.get(cloneSetList.get(cloneSetId).getCloneList().get(cloneId).getFileId());
-				jp.ac.osaka.u.ist.t_ishizu.TestHeuristicICCA.CodeClone c_selected = cloneSetList.get(cloneSetId).getCloneList().get(cloneId);
+				ArrayList<jp.ac.osaka.u.ist.t_ishizu.ESCMA_COBOL.CodeClone> cloneList = fileToCloneMap.get(cloneSetList.get(cloneSetId).getCloneList().get(cloneId).getFileId());
+				jp.ac.osaka.u.ist.t_ishizu.ESCMA_COBOL.CodeClone c_selected = cloneSetList.get(cloneSetId).getCloneList().get(cloneId);
 				BufferedReader br = getBufferedReader(fileIdList.get(cloneSetList.get(cloneSetId).getCloneList().get(cloneId).getFileId()));
 				int line_selected= 0;
 				boolean firstline = true;
@@ -654,7 +651,7 @@ public class MyFrame extends JFrame implements ActionListener{
 						 boolean find_clone = false;
 						 boolean find_selected = false;
 						 boolean find_brother = false;
-						 for(jp.ac.osaka.u.ist.t_ishizu.TestHeuristicICCA.CodeClone c:cloneList){
+						 for(jp.ac.osaka.u.ist.t_ishizu.ESCMA_COBOL.CodeClone c:cloneList){
 							 if(c.getLS()<=line1&&c.getLE()>=line1){
 								 find_clone = true;
 								 if(c.getLS() != currentLine){
@@ -672,7 +669,7 @@ public class MyFrame extends JFrame implements ActionListener{
 										find_selected = true;
 										if(line_selected==0){
 											line_selected = line1;
-											
+
 										}
 									 }
 								 }
@@ -720,7 +717,7 @@ public class MyFrame extends JFrame implements ActionListener{
 						System.exit(0);
 				 }
 				 html1 = html1+"</body></html>";
-				 
+
 				 //html1 = "<html>"+"<body><h1>"+fileIdList.get(c.getFileId())+"</h1>"+"</html>";
 				 editPane1.setText(html1);
 				 editPane2.setText(html2);
@@ -736,12 +733,12 @@ public class MyFrame extends JFrame implements ActionListener{
 				 //System.out.println(scrollPane1.getVerticalScrollBar().getValue());
 			}
 		}
-		
+
 		public void setList(JList<String> list){
 			this.cloneJList = list;
 		}
 	}
-	
+
 	private class CCMCodeCloneSelected extends AbstractAction{
 		private JList<String> cloneJList;
 		private JEditorPane editPane1;
@@ -758,7 +755,7 @@ public class MyFrame extends JFrame implements ActionListener{
 		public void setId(int id){
 			cloneSetId = id;
 		}
-		
+
 		@Override
 		public void actionPerformed(ActionEvent e){
 			int cloneId = cloneJList.getSelectedIndex();
@@ -837,7 +834,7 @@ public class MyFrame extends JFrame implements ActionListener{
 										find_selected = true;
 										if(line_selected==0){
 											line_selected = line1;
-											
+
 										}
 									 }
 								 }
@@ -888,7 +885,7 @@ public class MyFrame extends JFrame implements ActionListener{
 						System.exit(0);
 				 }
 				 html1 = html1+"</body></html>";
-				 
+
 				 //html1 = "<html>"+"<body><h1>"+fileIdList.get(c.getFileId())+"</h1>"+"</html>";
 				 editPane1.setText(html1);
 				 editPane2.setText(html2);
@@ -904,7 +901,7 @@ public class MyFrame extends JFrame implements ActionListener{
 				 //System.out.println(scrollPane1.getVerticalScrollBar().getValue());
 			}
 		}
-		
+
 		public boolean compareSnipets(ArrayList<Integer> snipet1,ArrayList<Integer> snipet2){
 			if(snipet1.size()!=snipet2.size()){
 				System.out.println("snipet1:"+snipet1+"\tsnipet2:"+snipet2);
@@ -919,17 +916,17 @@ public class MyFrame extends JFrame implements ActionListener{
 			}
 			return true;
 		}
-		
+
 		public void setList(JList<String> list){
 			this.cloneJList = list;
 		}
 	}
-	
+
 	public static void main(String[] args){
 		new MyFrame();
 	}
-	
-	
+
+
 	public void actionPerformed(ActionEvent e){
 		int command = Integer.parseInt(e.getActionCommand());
 		JPanel panel = new JPanel();
@@ -946,7 +943,7 @@ public class MyFrame extends JFrame implements ActionListener{
 		case 3:
 			panel = getFileListPanel(); //next 5
 			break;
-		case 4: // next 
+		case 4: // next
 			panel = getViewerPanel();
 			break;
 		case 5:
@@ -969,9 +966,9 @@ public class MyFrame extends JFrame implements ActionListener{
 			panel = getCCMViewerPanel();
 			break;
 		default:
-			break;	
+			break;
 		}
-		
+
 		getContentPane().removeAll();
 		getContentPane().add(panel);
 		setVisible(true);
@@ -979,9 +976,9 @@ public class MyFrame extends JFrame implements ActionListener{
 			operateDetector();
 			panel.add(createButton("戻る","0"));
 		}
-		
+
 	}
-	
+
 	public void operateDetector(){
 		mainArea.append("コードクローンの検出を開始しています．\n");
 		mainArea.append("ソースコードを抽出しています．\n");
@@ -993,9 +990,9 @@ public class MyFrame extends JFrame implements ActionListener{
 		executeCCFX();
 		mainArea.append("CONVERTERを実行しています．\n");
 		convertCCFXtoCCF();
-		TestHeuristicICCA.main(new String[]{"c.txt"});
+		ESCMA_COBOL.main(new String[]{"c.txt"});
 	}
-	
+
 	public void executeCCFX(){
 		String APath = new File(".").getAbsolutePath() +"\\a.ccfxd";
 		String XPath = CCFXPath + "\\ccfx";
@@ -1007,9 +1004,9 @@ public class MyFrame extends JFrame implements ActionListener{
 		executeCommand(new String[]{XPath,"s",APath,"-o","filtered.ccfxd","-ci","filtered.txt"});
 		/**filtered.ccfxdをコンバートする．**/
 		executeCommand(new String[]{XPath,"p","filtered.ccfxd","-o","b.txt"});
-		
+
 	}
-	
+
 	public void executeCommand(String[] command){
 		for(String c:command){
 			System.out.print(c +" ");
@@ -1028,7 +1025,7 @@ public class MyFrame extends JFrame implements ActionListener{
 				System.exit(0);
 			}
 	}
-	
+
 	public PrintWriter getPrintWriter(String file){
 		File output = new File(file);
 		try{
@@ -1038,7 +1035,7 @@ public class MyFrame extends JFrame implements ActionListener{
 		}
 		return null;
 	}
-	
+
 	public void convertCCFXtoCCF(){
 		ArrayList<String> fileIdList = createFileIdList("b.txt");
 		HashMap<Integer,ArrayList<CodeClone>> fileToCloneMap = createFileToCloneMap("b.txt");
@@ -1047,7 +1044,7 @@ public class MyFrame extends JFrame implements ActionListener{
 		findCloneLocation(fileIdList, prepHierarchy, fileToCloneMap);
 		convert(fileIdList,cloneSetList);
 	}
-	
+
 	public void convert(ArrayList<String> fileList,ArrayList<CloneSet> cloneSetList){
 		PrintWriter pw = getPrintWriter(new File("c.txt"));
 		pw.println("#begin{file description}");
@@ -1068,7 +1065,7 @@ public class MyFrame extends JFrame implements ActionListener{
 		pw.println("#end{clone}");
 		pw.close();
 	}
-	
+
 	public  ArrayList<String> createFileIdList(String pass){
 		BufferedReader br = getBufferedReader(pass);
 		ArrayList<String> fileIdList = new ArrayList<String>();
@@ -1092,7 +1089,7 @@ public class MyFrame extends JFrame implements ActionListener{
 		}
 		return fileIdList;
 	}
-	
+
 	public ArrayList<CloneSet> createCloneSetList(HashMap<Integer,ArrayList<CodeClone>>map){
 		ArrayList<CloneSet> cloneSetList = new ArrayList<CloneSet>();
 		int cloneSetId=0;
@@ -1105,7 +1102,7 @@ public class MyFrame extends JFrame implements ActionListener{
 		}
 		return cloneSetList;
 	}
-	
+
 	public HashMap<Integer,ArrayList<CodeClone>> createFileToCloneMap(String pass){
 		BufferedReader br = getBufferedReader(pass);
 		HashMap<Integer,ArrayList<CodeClone>> fileToCloneMap = new HashMap<Integer,ArrayList<CodeClone>>();
@@ -1165,7 +1162,7 @@ public class MyFrame extends JFrame implements ActionListener{
 		}
 		return fileToCloneMap;
 	}
-	
+
 	public int getCodeCloneIndex(ArrayList<CodeClone>list,CodeClone clone){
 		for(int i=0;i<list.size();i++){
 			CodeClone c = list.get(i);
@@ -1175,7 +1172,7 @@ public class MyFrame extends JFrame implements ActionListener{
 		}
 		return -1;
 	}
-	
+
 	public String[] getPrepHierarchy(String pass){
 		BufferedReader br = getBufferedReader(pass);
 		String[] prepHierarchy = new String[2];
@@ -1194,14 +1191,14 @@ public class MyFrame extends JFrame implements ActionListener{
 				}
 				str = br.readLine();
 			}
-					
+
 		}catch(IOException e){
 			System.out.println(e.getMessage());
 			System.exit(0);
 		}
 		return prepHierarchy;
 	}
-	
+
 	public void findCloneLocation(ArrayList<String> fileIdList,String[] prepHierarchy,HashMap<Integer,ArrayList<CodeClone>> map){
 		for(int fileId:map.keySet()){
 			StringBuffer sb = new StringBuffer();
@@ -1230,7 +1227,7 @@ public class MyFrame extends JFrame implements ActionListener{
 			}
 		}
 	}
-	
+
 	public BufferedReader getBufferedReader(String file){
 		File input = new File(file);
 		if(!input.exists()){
@@ -1244,7 +1241,7 @@ public class MyFrame extends JFrame implements ActionListener{
 		}
 		return null;
 	}
-	
+
 	public PrintWriter getPrintWriter(File output){
 		try{
 			return new PrintWriter(new BufferedWriter(new FileWriter(output,false)));
@@ -1252,5 +1249,5 @@ public class MyFrame extends JFrame implements ActionListener{
 			e2.printStackTrace();
 		}
 		return null;
-	} 
+	}
 }
