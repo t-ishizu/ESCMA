@@ -6,18 +6,18 @@ package jp.ac.osaka.u.ist.t_ishizu.WhirlWind;
  */
 
 import static jp.ac.osaka.u.ist.t_ishizu.WhirlWind.UpperStream.*;
+
+import java.util.ArrayList;
 public class WhirlWind {
 	/**
 	 * @author t-ishizu
 	 * 
 	 */
+	public static ArrayList<String> fileList; 
 	public WhirlWind(){
-		if(CobolSeedFile==null){
-			System.err.println("!Error:Cobol Source Code isn't defined.");
-			System.exit(0);
-		}
 		
 	}
-	
-	
+	public void run(){
+		fileList = createFileList();
+	}
 }
