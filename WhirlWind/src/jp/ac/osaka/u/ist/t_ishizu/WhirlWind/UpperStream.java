@@ -71,7 +71,7 @@ public class UpperStream {
 		}
 		return fileList;
 	}
-	
+	/**
 	public static final ArrayList<Sprout> createSproutList(){
 		if(CobolSeedFile==null){
 			System.err.println("!Error:Cobol Source Code isn't defined.");
@@ -91,7 +91,6 @@ public class UpperStream {
 					find = false;
 					sproutList.add(sp);
 				}else if(find){
-					/* register seed information */
 					String[] str_split = str.split("[.,\t]+",0);
 					Seed s = new Seed()
 					.setFileId(Integer.parseInt(str_split[1]))
@@ -109,8 +108,8 @@ public class UpperStream {
 		}
 		return sproutList;
 	}
-	
-	
+	**/
+	/*
 	public static final HashMap<Integer,ArrayList<Seed>> createSeedMap(){
 		HashMap<Integer,ArrayList<Seed>> SeedMap = new HashMap<Integer,ArrayList<Seed>>();
 		for(Sprout sp : sproutList){
@@ -123,5 +122,90 @@ public class UpperStream {
 		}
 		return SeedMap;
 	}
+	*/
+	
+	public static HashMap<Integer,ArrayList<Seed>> createSeedMap(){
+		BufferedReader br = getBufferedReader(CobolSeedFile);
+		HashMap<Integer,ArrayList<Seed>> SeedMap = new HashMap<Integer,ArrayList<Seed>>();
+		try{
+			String str = br.readLine();
+			boolean find = false;
+			while(str!=null){
+				if(str.equals("clone_pairs {")){
+					find = true;
+				}else if(str.equals("}")){
+					find = false;
+				}else if(find){
+					String[] str_split = str.split("[.,\\-\t]+",0);
+					Seed s1 = new Seed()
+					.setFileId(Integer.parseInt(str_split[1]))
+					.setTS(Integer.parseInt(str_split[2])).setTE(Integer.parseInt(str_split[3]));
+					Seed s2 = new Seed()
+					.setFileId(Integer.parseInt(str_split[4]))
+					.setTS(Integer.parseInt(str_split[5])).setTE(Integer.parseInt(str_split[6]));
+					int indexOfs1 = -1;
+					if(SeedMap.containsValue(s1.getFileId())){
+						indexOfs1=getCodeCloneIndex(SeedMap.get(s1.getFileId()),s1);
+					}else{
+						SeedMap.put(s1.getFileId(), new ArrayList<Seed>());
+					}
+					int indexOfs2 = -1;
+					if(SeedMap.containsValue(s2.getFileId())){
+						indexOfs2=getCodeCloneIndex(SeedMap.get(s2.getFileId()),s2);
+					}else{
+						SeedMap.put(s2.getFileId(), new ArrayList<Seed>());
+					}
+					if(indexOfs1==-1&&indexOfs2==-1){
+						SeedMap.get(s1.getFileId()).add(s1);
+						SeedMap.get(s2.getFileId()).add(s2);
+						Sprout sp = new Sprout();
+						s1.setSprout(sp);
+						s2.setSprout(sp);
+						sp.addSeedList(s1);
+						sp.addSeedList(s2);
+					}else if(indexOfs1!=-1&&indexOfs2==-1){
+						SeedMap.get(s2.getFileId()).add(s2);
+						Sprout sp = SeedMap.get(s1.getFileId()).get(indexOfs1).getSprout();
+						s2.setSprout(sp);
+						sp.addSeedList(s2);
+					}else if(indexOfs1==-1&&indexOfs2!=-1){
+						SeedMap.get(s1.getFileId()).add(s1);
+						Sprout sp = SeedMap.get(s2.getFileId()).get(indexOfs2).getSprout();
+						s1.setSprout(sp);
+						sp.addSeedList(s1);
+					}
+				}
+				str=br.readLine();
+			}
+		}catch(IOException e){
+			System.out.println(e.getMessage());
+			System.exit(0);
+		}
+		return SeedMap;
+	}
+	
+	public static int getCodeCloneIndex(ArrayList<Seed>list,Seed s){
+		for(int i=0;i<list.size();i++){
+			Seed seed = list.get(i);
+			if(s.getTS()==seed.getTS()&&s.getTE()==seed.getTE()){
+				return i;
+			}
+		}
+		return -1;
+	}
+	
+	public static ArrayList<Sprout> createSproutList(){
+		ArrayList<Sprout> sproutList = new ArrayList<Sprout>();
+		int sproutId=0;
+		for(ArrayList<Seed> list:SeedMap.values()){
+			for(Seed s : list){
+				if(s.getSprout().getId()==-1){
+					sproutList.add(s.getSprout().setId(sproutId++));
+				}
+			}
+		}
+		return sproutList;
+	}
+	
 	private UpperStream(){}
 }

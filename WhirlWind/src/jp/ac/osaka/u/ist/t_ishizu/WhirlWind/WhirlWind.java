@@ -23,7 +23,8 @@ public class WhirlWind {
 	public void run(){
 		/* create ArrayList by UpperStream class */ 
 		fileList = createFileList();
-		sproutList = createSproutList();
 		SeedMap = createSeedMap();
+		sproutList = createSproutList();
+		
 	}
 }

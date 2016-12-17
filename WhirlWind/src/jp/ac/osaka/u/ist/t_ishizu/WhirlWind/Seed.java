@@ -1,8 +1,8 @@
 package jp.ac.osaka.u.ist.t_ishizu.WhirlWind;
 
 public class Seed {
-	private int id;
-	private int fileId,LS,LE,CS,CE,TS,TE;
+	private int id=-1;
+	private int fileId=-1,LS,LE,CS,CE,TS,TE;
 	private Sprout sprout;
 	
 	/* getter */

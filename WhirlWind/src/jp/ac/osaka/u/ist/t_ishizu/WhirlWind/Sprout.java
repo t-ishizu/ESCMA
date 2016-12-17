@@ -3,7 +3,7 @@ package jp.ac.osaka.u.ist.t_ishizu.WhirlWind;
 import java.util.ArrayList;
 
 public class Sprout {
-	private int id;
+	private int id=-1;
 	private ArrayList<Seed> seedList = new ArrayList<Seed>();
 	
 	/* getter */
