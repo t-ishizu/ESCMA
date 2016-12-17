@@ -17,6 +17,8 @@ public class WhirlWind {
 	public static ArrayList<String> fileList; 
 	public static ArrayList<Sprout> sproutList;
 	public static HashMap<Integer, ArrayList<Seed>> SeedMap;
+	public static String[] CCFXDFileArray;
+	public static HashMap<Integer, ArrayList<Token>> tokenMap;
 	public WhirlWind(){
 		
 	}
@@ -25,6 +27,7 @@ public class WhirlWind {
 		fileList = createFileList();
 		SeedMap = createSeedMap();
 		sproutList = createSproutList();
-		
+		CCFXDFileArray = createCCFXDFileArray();
+		tokenMap = createTokenMap();
 	}
 }

@@ -207,5 +207,71 @@ public class UpperStream {
 		return sproutList;
 	}
 	
+	public static String[] createCCFXDFileArray(){
+		BufferedReader br = getBufferedReader(CobolSeedFile);
+		String[] CCFXDFileArray = new String[2];
+		try{
+			String str = br.readLine();
+			while(str!=null){
+				String[] str_split = str.split("[\\s]+",0);
+				if(str_split[0].equals("option:")){
+					if(str_split[1].equals("-preprocessed_file_postfix")){
+						CCFXDFileArray[0] = str_split[2];
+					}else if(str_split[1].equals("-n")){
+						CCFXDFileArray[1] = str_split[2];
+						if(!CCFXDFileArray[0].isEmpty())
+						return CCFXDFileArray;
+					}
+				}
+				str = br.readLine();
+			}
+					
+		}catch(IOException e){
+			System.out.println(e.getMessage());
+			System.exit(0);
+		}
+		return CCFXDFileArray;
+	}
+	
+	public static HashMap<Integer,ArrayList<Token>> createTokenMap(){
+		HashMap<Integer,ArrayList<Token>> tokenMap = new HashMap<Integer, ArrayList<Token>>(); 
+		for(int fileId:SeedMap.keySet()){
+			StringBuffer sb = new StringBuffer();
+			sb.append(CCFXDFileArray[1]);
+			sb.append("\\.ccfxprepdir");
+			sb.append(fileList.get(fileId-1).substring(CCFXDFileArray[1].length(), fileList.get(fileId-1).length()));
+			sb.append(CCFXDFileArray[0]);
+			String path =  sb.toString();
+			BufferedReader br = getBufferedReader(path);
+			ArrayList<Token> tokenList = new ArrayList<Token>();
+			try {
+				String str = br.readLine();
+				ArrayList<Integer[]> coorList = new ArrayList<Integer[]>();
+				int id = 0;
+				while(str!=null){
+					String[] str_split = str.split("[.\\s\\t]+",0);
+					Integer[] tokenArr = new Integer[]{
+							Integer.parseInt(str_split[0],16),Integer.parseInt(str_split[1],16)};
+					coorList.add(tokenArr);
+					str = br.readLine();
+					Token token = new Token().setFileId(fileId)
+											 .setId(id++)
+							                 .setLine(Integer.parseInt(str_split[0],16))
+							                 .setColumn(Integer.parseInt(str_split[1],16))
+							                 .setToken(str_split[4]);
+					tokenList.add(token);
+				}
+				for(Seed s:SeedMap.get(fileId)){
+					s.setLS(coorList.get(s.getTS())[0]).setLE(coorList.get(s.getTE())[0])
+					 .setCS(coorList.get(s.getTS())[1]).setCE(coorList.get(s.getTE())[1]);
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			tokenMap.put(fileId,tokenList);
+		}
+		return tokenMap;
+	}
+	
 	private UpperStream(){}
 }
