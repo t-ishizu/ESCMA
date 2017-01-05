@@ -4,6 +4,8 @@ public class Seed {
 	private int id=-1;
 	private int fileId=-1,LS,LE,CS,CE,TS,TE;
 	private Sprout sprout;
+	private Token initialToken;
+	private Token finalToken;
 	
 	/* getter */
 	public int getId(){return id;};
@@ -15,6 +17,8 @@ public class Seed {
 	public int getTS(){ return TS;};
 	public int getTE(){ return TE;};
 	public Sprout getSprout(){ return sprout;};
+	public Token getInitial(){return initialToken;}
+	public Token getFinal(){return finalToken;}
 	
 	/* setter */
 	public Seed setId(int id){this.id = id; return this;};
@@ -26,4 +30,6 @@ public class Seed {
 	public Seed setTS(int TS){this.TS = TS; return this;};
 	public Seed setTE(int TE){this.TE = TE; return this;};
 	public Seed setSprout(Sprout sp){this.sprout = sp; return this;};
+	public Seed setInitial(Token t){this.initialToken = t; return this;};
+	public Seed setFinal(Token t){this.finalToken = t; return this;};
 }

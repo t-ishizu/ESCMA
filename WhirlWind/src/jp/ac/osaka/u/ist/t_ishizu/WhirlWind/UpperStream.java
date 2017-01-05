@@ -15,7 +15,7 @@ import static jp.ac.osaka.u.ist.t_ishizu.WhirlWind.WhirlWind.*;
  *
  */
 public class UpperStream {
-	public static String CobolSeedFile;
+	public static String CobolSeedFile = "b.txt";
 	
 	public static final BufferedReader getBufferedReader(String fileName){
 		File file = new File(fileName);
@@ -55,13 +55,13 @@ public class UpperStream {
 			String str = br.readLine();
 			boolean canRead = false;
 			while(str!=null){
-				if(str.equals("#begin{file description}")){
+				if(str.equals("source_files {")){
 					canRead = true;
-				}else if(str.equals("#end{file description}")){
+				}else if(str.equals("}")){
 					canRead = false;
 				}else if(canRead){
 					String[] str_split = str.split("[\t]+",0);
-					fileList.add(str_split[3]);
+					fileList.add(str_split[1]);
 				}
 				str=br.readLine();
 			}

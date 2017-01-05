@@ -12,7 +12,7 @@ public class Pump {
 	 * 
 	 */
 	public static void main(String[] args) {
-		
+		new WhirlWind().run();
 
 	}
 
