@@ -138,19 +138,21 @@ public class UpperStream {
 				}else if(find){
 					String[] str_split = str.split("[.,\\-\t]+",0);
 					Seed s1 = new Seed()
+					.setId(Integer.parseInt(str_split[0]))
 					.setFileId(Integer.parseInt(str_split[1]))
 					.setTS(Integer.parseInt(str_split[2])).setTE(Integer.parseInt(str_split[3]));
 					Seed s2 = new Seed()
+					.setId(Integer.parseInt(str_split[0]))
 					.setFileId(Integer.parseInt(str_split[4]))
 					.setTS(Integer.parseInt(str_split[5])).setTE(Integer.parseInt(str_split[6]));
 					int indexOfs1 = -1;
-					if(SeedMap.containsValue(s1.getFileId())){
+					if(SeedMap.containsKey(s1.getFileId())){
 						indexOfs1=getCodeCloneIndex(SeedMap.get(s1.getFileId()),s1);
 					}else{
 						SeedMap.put(s1.getFileId(), new ArrayList<Seed>());
 					}
 					int indexOfs2 = -1;
-					if(SeedMap.containsValue(s2.getFileId())){
+					if(SeedMap.containsKey(s2.getFileId())){
 						indexOfs2=getCodeCloneIndex(SeedMap.get(s2.getFileId()),s2);
 					}else{
 						SeedMap.put(s2.getFileId(), new ArrayList<Seed>());
@@ -237,7 +239,7 @@ public class UpperStream {
 		HashMap<Integer,ArrayList<Token>> tokenMap = new HashMap<Integer, ArrayList<Token>>(); 
 		for(int fileId:SeedMap.keySet()){
 			StringBuffer sb = new StringBuffer();
-			sb.append(CCFXDFileArray[1]);
+			sb.append(CCFXDFileArray[1]);	
 			sb.append("\\.ccfxprepdir");
 			sb.append(fileList.get(fileId-1).substring(CCFXDFileArray[1].length(), fileList.get(fileId-1).length()));
 			sb.append(CCFXDFileArray[0]);

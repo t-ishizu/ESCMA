@@ -46,7 +46,7 @@ public class Token {
 		}else if(token.endsWith("block")){
 			type = block;
 		}else{
-			System.out.println("Type Unknown:"+fileId+" : "+id+" : " + token + " : Line "+line );
+			System.out.println("@Token.class Type Unknown:"+fileId+" : "+id+" : " + token + " : Line "+line );
 			type = unknown;
 		}
 	}
