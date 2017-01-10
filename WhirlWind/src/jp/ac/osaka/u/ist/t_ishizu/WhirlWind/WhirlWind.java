@@ -1,31 +1,43 @@
 package jp.ac.osaka.u.ist.t_ishizu.WhirlWind;
 /**
- * 
+ *
  * @author t-ishizu
- * 
+ *
  */
 
-import static jp.ac.osaka.u.ist.t_ishizu.WhirlWind.UpperStream.*;
 import static jp.ac.osaka.u.ist.t_ishizu.WhirlWind.TokenType.*;
+import static jp.ac.osaka.u.ist.t_ishizu.WhirlWind.UpperStream.*;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 public class WhirlWind {
 	/**
 	 * @author t-ishizu
-	 * 
+	 *
 	 */
-	public static ArrayList<String> fileList; 
+	public static final int BASIC = 0;
+	public static final int GREEDY = 1;
+	public static int slimmingMode = BASIC;
+	/**
+	 * slimmingMode
+	 * 0 BASIC
+	 * 1 HEURISTIC GREEDY
+	 * 2 HEURISTIC
+	 */
+
+	public static ArrayList<String> fileList;
 	public static ArrayList<Sprout> sproutList;
 	public static HashMap<Integer, ArrayList<Seed>> SeedMap;
 	public static String[] CCFXDFileArray;
 	public static HashMap<Integer, ArrayList<Token>> tokenMap;
-	
+
+
 	public WhirlWind(){
 		initialize();
 	}
-	
+
 	public void initialize(){
-		/* create ArrayList by UpperStream class */ 
+		/* create ArrayList by UpperStream class */
 		System.out.println("@WhirlWind.initialize()");
 		fileList = createFileList();
 		SeedMap = createSeedMap();
@@ -33,7 +45,7 @@ public class WhirlWind {
 		CCFXDFileArray = createCCFXDFileArray();
 		tokenMap = createTokenMap();
 	}
-	
+
 	public void terminate(){
 		System.out.println("@WhirlWind.terminate()");
 		fileList.clear();
@@ -42,32 +54,38 @@ public class WhirlWind {
 		CCFXDFileArray=null;
 		tokenMap.clear();
 	}
-	
+
 	public void run(){
 		confirmGermination();
 		terminate();
 	}
-	
+
 	public void confirmGermination(){
-		System.out.println("@WhirlWind.confirmGermination()");
+		System.out.print("@WhirlWind.confirmGermination() ");
+		if(slimmingMode==BASIC)System.out.println("@BASIC MODE:");
+		else System.out.println("@HEURISTIC MODE:");
 		for(int fileId : SeedMap.keySet()){
 			for(Seed seed:SeedMap.get(fileId)){
 				seed.setInitial(tokenMap.get(fileId).get(seed.getTS()))
 				    .setFinal(tokenMap.get(fileId).get(seed.getTE()));
-				if(isFunction(seed)){
-					System.out.print("@Func Germination : ");
-					for(int t = seed.getTS();t<=seed.getTE();t++){
-						System.out.print(tokenMap.get(fileId).get(t).getToken()+"\t");
+				if(slimmingMode == BASIC){
+
+					if(isFunction(seed)){
+						System.out.print("@Func Germination : ");
+						for(int t = seed.getTS();t<=seed.getTE();t++){
+							System.out.print(tokenMap.get(fileId).get(t).getToken()+"\t");
+						}
+						System.out.println();
 					}
-					System.out.println();
-				}
-				if(isParagraph(seed)){
-					
+				}else{
+					if(isParagraph(seed)){
+
+					}
 				}
 			}
 		}
 	}
-	
+
 	public boolean isFunction(Seed seed){
 		if(beginFunction(seed)&&endFunction(seed)){
 			if(acrossFunction(seed.getTS(),seed)<0){
@@ -76,7 +94,7 @@ public class WhirlWind {
 		}
 		return false;
 	}
-	
+
 	public boolean beginFunction(Seed seed){
 		ArrayList<Token> tokenList = tokenMap.get(seed.getFileId());
 		if(tokenList.get(seed.getTS()).getType()==word&&
@@ -85,7 +103,7 @@ public class WhirlWind {
 		}
 		return false;
 	}
-	
+
 	public int acrossFunction(int left,Seed seed){
 		ArrayList<Token> tokenList = tokenMap.get(seed.getFileId());
 		if(seed.getTE()-left>=0){
@@ -99,7 +117,7 @@ public class WhirlWind {
 		}
 		return -1;
 	}
-	
+
 	public boolean endFunction(Seed seed){
 		ArrayList<Token> tokenList = tokenMap.get(seed.getFileId());
 		if(tokenList.get(seed.getTE()).getToken().equals("suffix:period")){
@@ -112,7 +130,32 @@ public class WhirlWind {
 		}
 		return false;
 	}
-	
+
+	public Seed deletePrefix(Seed seed){
+		ArrayList<Token> tokenList = tokenMap.get(seed.getFileId());
+		if(seed.getTS()==0) return seed;
+		if(seed.getTS()!=0){
+			if(tokenList.get(seed.getTS()-1).getType()==suffix){
+				return seed;
+			}
+		}
+		/*TS!=0 && token(TS-1).Type!=suffix*/
+		int findIndex=seed.getTE();
+		for(int index=seed.getTS();index<=seed.getTE();index++){
+
+		}
+		return seed;
+	}
+
+	public Seed splitSeed(Seed seed){
+
+		return seed;
+	}
+
+	public Seed deleteSuffix(Seed seed){
+
+		return seed;
+	}
 	public boolean isParagraph(Seed seed){
 		/*begin*/
 		ArrayList<Token> tokenList = tokenMap.get(seed.getFileId());
@@ -121,6 +164,7 @@ public class WhirlWind {
 				return false;
 			}
 		}
+		/*mid*/
 		if(acrossFunction(seed.getTS(),seed)>0){
 			return false;
 		}
@@ -130,6 +174,6 @@ public class WhirlWind {
 		}
 		return false;
 	}
-	
-	
+
+
 }
