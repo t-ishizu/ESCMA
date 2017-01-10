@@ -1,5 +1,34 @@
 package jp.ac.osaka.u.ist.t_ishizu.WhirlWind;
 
+import java.util.ArrayList;
+
 public class CloneSet {
+	private int id;
+	private ArrayList<Seed> seedList;
+	private int weight;
+	private int overlapSetIndex;
+	private int overlapSetId;
+	private boolean dispersive;
+
+	public CloneSet(){
+		seedList = new ArrayList<Seed>();
+	}
+
+	public CloneSet addSeed(Seed seed){seedList.add(seed);return this;}
+
+	/* setter */
+	public CloneSet setId(int id){this.id=id;return this;}
+	public CloneSet setWeight(int weight){this.weight=weight;return this;}
+	public CloneSet setOverlapSetIndex(int overlapSetIndex){this.overlapSetIndex=overlapSetIndex;return this;}
+	public CloneSet setOverlapSetId(int overlapSetId){this.overlapSetId=overlapSetId;return this;}
+	public CloneSet setDispersive(boolean dispersive){this.dispersive=dispersive;return this;}
+
+	/* getter */
+	public int getId(){return id;}
+	public ArrayList<Seed> getSeedList(){return seedList;}
+	public int getWeight(){return weight;}
+	public int getOverlapSetIndex(){return overlapSetIndex;}
+	public int getOverlapSetId(){return overlapSetId;}
+	public boolean getDispersive(){return dispersive;}
 
 }
