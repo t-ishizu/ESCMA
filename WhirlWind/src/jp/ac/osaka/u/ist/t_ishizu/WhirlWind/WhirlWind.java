@@ -21,15 +21,21 @@ public class WhirlWind {
 	public static HashMap<Integer, ArrayList<Token>> tokenMap;
 	
 	public WhirlWind(){
-		
+		initialize();
 	}
 	
 	public void initialize(){
-		
+		/* create ArrayList by UpperStream class */ 
+		System.out.println("@WhirlWind.initialize()");
+		fileList = createFileList();
+		SeedMap = createSeedMap();
+		sproutList = createSproutList();
+		CCFXDFileArray = createCCFXDFileArray();
+		tokenMap = createTokenMap();
 	}
 	
 	public void terminate(){
-		System.out.println("@WhirlWind.class terminate.method");
+		System.out.println("@WhirlWind.terminate()");
 		fileList.clear();
 		sproutList.clear();
 		SeedMap.clear();
@@ -38,24 +44,18 @@ public class WhirlWind {
 	}
 	
 	public void run(){
-		/* create ArrayList by UpperStream class */ 
-		fileList = createFileList();
-		SeedMap = createSeedMap();
-		sproutList = createSproutList();
-		CCFXDFileArray = createCCFXDFileArray();
-		tokenMap = createTokenMap();
 		confirmGermination();
 		terminate();
 	}
 	
 	public void confirmGermination(){
-		System.out.println("@WhirlWind.class confirmGermination.method");
+		System.out.println("@WhirlWind.confirmGermination()");
 		for(int fileId : SeedMap.keySet()){
 			for(Seed seed:SeedMap.get(fileId)){
 				seed.setInitial(tokenMap.get(fileId).get(seed.getTS()))
 				    .setFinal(tokenMap.get(fileId).get(seed.getTE()));
 				if(isFunction(seed)){
-					System.out.print("@WhirlWind.class Func Germination : ");
+					System.out.print("@Func Germination : ");
 					for(int t = seed.getTS();t<=seed.getTE();t++){
 						System.out.print(tokenMap.get(fileId).get(t).getToken()+"\t");
 					}
@@ -114,7 +114,22 @@ public class WhirlWind {
 	}
 	
 	public boolean isParagraph(Seed seed){
-		
+		/*begin*/
+		ArrayList<Token> tokenList = tokenMap.get(seed.getFileId());
+		if(seed.getTS()!=0){
+			if(!tokenList.get(seed.getTS()-1).getToken().equals("suffix:period")){
+				return false;
+			}
+		}
+		if(acrossFunction(seed.getTS(),seed)>0){
+			return false;
+		}
+		/*end*/
+		if(tokenList.get(seed.getTE()).getToken().equals("suffix:period")){
+			return true;
+		}
 		return false;
 	}
+	
+	
 }
