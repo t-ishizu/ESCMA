@@ -67,7 +67,8 @@ public class WhirlWind {
 		if(slimmingMode==BASIC)System.out.println("@BASIC MODE:");
 		else System.out.println("@HEURISTIC MODE:");
 		for(int fileId : SeedMap.keySet()){
-			for(int index=0;index<SeedMap.get(fileId).size();index++){
+			int size = SeedMap.get(fileId).size();
+			for(int index=0;index<size;index++){
 				Seed seed = SeedMap.get(fileId).get(index);
 				seed.setInitial(tokenMap.get(fileId).get(seed.getTS()))
 				    .setFinal(tokenMap.get(fileId).get(seed.getTE()));
@@ -82,7 +83,11 @@ public class WhirlWind {
 						}
 					}else{
 						seed = deletePrefix(seed);
-						for(Seed s:splitSeed(seed)){
+						ArrayList<Seed> splitList = splitSeed(seed);
+						System.out.println("***************");
+						for(int j=0;j<splitList.size();j++){
+							Seed s = splitList.get(j);
+						//for(Seed s:splitSeed(seed)){
 							if(isParagraph(s))s.isValid();
 							else{
 								s=deleteSuffix(s);
@@ -198,6 +203,7 @@ public class WhirlWind {
 				seed.getSprout().addSplitSprout(sproutList.size());
 				sproutList.add(preSprout.setId(sproutList.size()));
 			}
+			preSeed.getSprout().addSeedList(preSeed);
 			splitedSeedList.add(preSeed);
 			SeedMap.get(seed.getFileId()).add(preSeed);
 			left = right+1;
