@@ -17,7 +17,7 @@ public class WhirlWind {
 	 */
 	public static final int BASIC = 0;
 	public static final int GREEDY = 1;
-	public static int slimmingMode = BASIC;
+	public static int slimmingMode = GREEDY;//BASIC;
 	/**
 	 * slimmingMode
 	 * 0 BASIC
@@ -30,8 +30,8 @@ public class WhirlWind {
 	public static HashMap<Integer, ArrayList<Seed>> SeedMap;
 	public static String[] CCFXDFileArray;
 	public static HashMap<Integer, ArrayList<Token>> tokenMap;
-
-
+	public static int splitedSeedId = -2;
+ 
 	public WhirlWind(){
 		initialize();
 	}
@@ -44,6 +44,7 @@ public class WhirlWind {
 		sproutList = createSproutList();
 		CCFXDFileArray = createCCFXDFileArray();
 		tokenMap = createTokenMap();
+		splitedSeedId = -2;
 	}
 
 	public void terminate(){
@@ -53,6 +54,7 @@ public class WhirlWind {
 		SeedMap.clear();
 		CCFXDFileArray=null;
 		tokenMap.clear();
+		splitedSeedId = -2;
 	}
 
 	public void run(){
@@ -65,27 +67,50 @@ public class WhirlWind {
 		if(slimmingMode==BASIC)System.out.println("@BASIC MODE:");
 		else System.out.println("@HEURISTIC MODE:");
 		for(int fileId : SeedMap.keySet()){
-			for(Seed seed:SeedMap.get(fileId)){
+			for(int index=0;index<SeedMap.get(fileId).size();index++){
+				Seed seed = SeedMap.get(fileId).get(index);
 				seed.setInitial(tokenMap.get(fileId).get(seed.getTS()))
 				    .setFinal(tokenMap.get(fileId).get(seed.getTE()));
-				if(slimmingMode == BASIC){
-
-					if(isFunction(seed)){
-						System.out.print("@Func Germination : ");
-						for(int t = seed.getTS();t<=seed.getTE();t++){
-							System.out.print(tokenMap.get(fileId).get(t).getToken()+"\t");
+				if(findSuffix(seed)){
+					if(slimmingMode == BASIC){
+						if(isFunction(seed)){
+							System.out.print("@Func Germination : ");
+							for(int t = seed.getTS();t<=seed.getTE();t++){
+								System.out.print(tokenMap.get(fileId).get(t).getToken()+"\t");
+							}
+							System.out.println();
 						}
-						System.out.println();
-					}
-				}else{
-					if(isParagraph(seed)){
-
+					}else{
+						seed = deletePrefix(seed);
+						for(Seed s:splitSeed(seed)){
+							if(isParagraph(s))s.isValid();
+							else{
+								s=deleteSuffix(s);
+								if(s.getTS()!=s.getTE()) s.isValid();
+								else s.isInvalid();
+							}
+							System.out.println("@Para Germination : " + s.messageSeed());
+							for(int t = s.getTS();t<=s.getTE();t++){
+								System.out.print(tokenMap.get(fileId).get(t).getToken()+"\t");
+							}
+							System.out.println();
+							System.out.println();
+						}
 					}
 				}
 			}
 		}
 	}
 
+	public boolean findSuffix(Seed seed){
+		ArrayList<Token> tokenList = tokenMap.get(seed.getFileId());
+		for(int index = seed.getTS();index<=seed.getTE();index++){
+			if(tokenList.get(index).getType()==suffix){
+				return true;
+			}
+		}
+		return false;
+	}
 	public boolean isFunction(Seed seed){
 		if(beginFunction(seed)&&endFunction(seed)){
 			if(acrossFunction(seed.getTS(),seed)<0){
@@ -140,20 +165,61 @@ public class WhirlWind {
 			}
 		}
 		/*TS!=0 && token(TS-1).Type!=suffix*/
-		int findIndex=seed.getTE();
+		/*with @WhirlWind.findSuffix(), this method must find suffix.*/
+		int minIndex=seed.getTE();
 		for(int index=seed.getTS();index<=seed.getTE();index++){
-
+			if(tokenList.get(index).getType()==suffix){
+				if(minIndex<index) minIndex=index+1;
+			}
 		}
+		seed.setTS(minIndex+1);
 		return seed;
 	}
 
-	public Seed splitSeed(Seed seed){
-
-		return seed;
+	
+	
+	public ArrayList<Seed> splitSeed(Seed seed){
+		ArrayList<Seed> splitedSeedList = new ArrayList<Seed>();
+		boolean splited = (seed.getSprout().getSplitList().size()>0) ;
+		int left = seed.getTS();
+		int right = acrossFunction(left,seed);
+		int loop = 0;
+		while(right>=0){
+			Seed preSeed = new Seed();
+			if(splited){
+				preSeed.setId(seed.getSprout().getSplitList().get(loop))
+				 .setFileId(seed.getFileId()).setTS(left).setTE(right)
+				 .setSprout(sproutList.get(seed.getSprout().getSplitSproutList().get(loop)));	
+			}else{
+				Sprout preSprout = new Sprout();
+				preSeed.setId(splitedSeedId)
+				.setFileId(seed.getFileId()).setTS(left).setTE(right).setSprout(preSprout);
+				seed.getSprout().addSplit(splitedSeedId--);
+				seed.getSprout().addSplitSprout(sproutList.size());
+				sproutList.add(preSprout.setId(sproutList.size()));
+			}
+			splitedSeedList.add(preSeed);
+			SeedMap.get(seed.getFileId()).add(preSeed);
+			left = right+1;
+			right = acrossFunction(left,seed);
+			loop++;
+		}
+		splitedSeedList.add(seed.setTS(left));
+		return splitedSeedList;
 	}
 
 	public Seed deleteSuffix(Seed seed){
-
+		ArrayList<Token> tokenList = tokenMap.get(seed.getFileId());
+		int maxIndex=-1;
+		for(int index = seed.getTE();index>=seed.getTS();index--){
+			if(tokenList.get(index).getType()==suffix){
+				if(maxIndex<index){
+					maxIndex=index;
+				}
+			}
+		}
+		if(maxIndex!=-1) seed.setTE(maxIndex);
+		else seed.setTE(seed.getTS());
 		return seed;
 	}
 	public boolean isParagraph(Seed seed){
@@ -169,7 +235,7 @@ public class WhirlWind {
 			return false;
 		}
 		/*end*/
-		if(tokenList.get(seed.getTE()).getToken().equals("suffix:period")){
+		if(tokenList.get(seed.getTE()).getType()==suffix){
 			return true;
 		}
 		return false;

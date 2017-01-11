@@ -1,11 +1,12 @@
 package jp.ac.osaka.u.ist.t_ishizu.WhirlWind;
 
 public class Seed {
-	private int id=-1;//original clone id
+	private int id=-1;//original clone id, but splited seed is identified by minus number less than -2
 	private int fileId=-1,LS,LE,CS,CE,TS,TE;
 	private Sprout sprout;
 	private Token initialToken;
 	private Token finalToken;
+	private boolean valid = false;
 	
 	/* getter */
 	public int getId(){return id;};
@@ -19,6 +20,7 @@ public class Seed {
 	public Sprout getSprout(){ return sprout;};
 	public Token getInitial(){return initialToken;}
 	public Token getFinal(){return finalToken;}
+	public boolean getValid(){return valid;}
 	
 	/* setter */
 	public Seed setId(int id){this.id = id; return this;};
@@ -32,4 +34,11 @@ public class Seed {
 	public Seed setSprout(Sprout sp){this.sprout = sp; return this;};
 	public Seed setInitial(Token t){this.initialToken = t; return this;};
 	public Seed setFinal(Token t){this.finalToken = t; return this;};
+	
+	public Seed isValid(){this.valid=true;return this;}
+	public Seed isInvalid(){this.valid=false;return this;}
+	
+	public String messageSeed(){
+		return "valid: "+valid+" id: "+id+" fileId: "+fileId+" TS: "+TS+" TE: "+TE+" sproutId: "+sprout.getId();
+	}
 }
