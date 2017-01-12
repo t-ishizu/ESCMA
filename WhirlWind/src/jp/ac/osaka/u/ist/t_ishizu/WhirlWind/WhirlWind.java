@@ -31,9 +31,10 @@ public class WhirlWind {
 	public static String[] CCFXDFileArray;
 	public static HashMap<Integer, ArrayList<Token>> tokenMap;
 	public static int splitedSeedId = -2;
- 
+	public static ArrayList<CloneSet> cloneSetList;
+
 	public WhirlWind(){
-		initialize();
+
 	}
 
 	public void initialize(){
@@ -55,10 +56,13 @@ public class WhirlWind {
 		CCFXDFileArray=null;
 		tokenMap.clear();
 		splitedSeedId = -2;
+		cloneSetList.clear();
 	}
 
 	public void run(){
+		initialize();
 		confirmGermination();
+		cloneSetList = createCloneSetList();;
 		terminate();
 	}
 
@@ -181,8 +185,8 @@ public class WhirlWind {
 		return seed;
 	}
 
-	
-	
+
+
 	public ArrayList<Seed> splitSeed(Seed seed){
 		ArrayList<Seed> splitedSeedList = new ArrayList<Seed>();
 		boolean splited = (seed.getSprout().getSplitList().size()>0) ;
@@ -194,7 +198,7 @@ public class WhirlWind {
 			if(splited){
 				preSeed.setId(seed.getSprout().getSplitList().get(loop))
 				 .setFileId(seed.getFileId()).setTS(left).setTE(right)
-				 .setSprout(sproutList.get(seed.getSprout().getSplitSproutList().get(loop)));	
+				 .setSprout(sproutList.get(seed.getSprout().getSplitSproutList().get(loop)));
 			}else{
 				Sprout preSprout = new Sprout();
 				preSeed.setId(splitedSeedId)
@@ -247,5 +251,11 @@ public class WhirlWind {
 		return false;
 	}
 
+
+	public ArrayList<CloneSet> createCloneSetList(){
+		ArrayList<CloneSet>cloneSetList = new ArrayList<CloneSet>();
+		
+		return cloneSetList;
+	}
 
 }
