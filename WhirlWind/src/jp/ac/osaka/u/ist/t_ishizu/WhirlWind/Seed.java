@@ -7,7 +7,8 @@ public class Seed {
 	private Token initialToken;
 	private Token finalToken;
 	private boolean valid = false;
-	
+	private int weight;
+
 	/* getter */
 	public int getId(){return id;};
 	public int getFileId(){ return fileId;};
@@ -21,7 +22,8 @@ public class Seed {
 	public Token getInitial(){return initialToken;}
 	public Token getFinal(){return finalToken;}
 	public boolean getValid(){return valid;}
-	
+	public int getWeight(){return weight;}
+
 	/* setter */
 	public Seed setId(int id){this.id = id; return this;};
 	public Seed setFileId(int FileId){this.fileId = FileId; return this;};
@@ -34,10 +36,16 @@ public class Seed {
 	public Seed setSprout(Sprout sp){this.sprout = sp; return this;};
 	public Seed setInitial(Token t){this.initialToken = t; return this;};
 	public Seed setFinal(Token t){this.finalToken = t; return this;};
-	
+
 	public Seed isValid(){this.valid=true;return this;}
 	public Seed isInvalid(){this.valid=false;return this;}
-	
+
+	public Seed calcWeight(){
+		TS = initialToken.getLine();TE = finalToken.getLine();
+		weight = TE - TS + 1;
+		return this;
+	}
+
 	public String messageSeed(){
 		return "valid: "+valid+" id: "+id+" fileId: "+fileId+" TS: "+TS+" TE: "+TE+" sproutId: "+sprout.getId();
 	}

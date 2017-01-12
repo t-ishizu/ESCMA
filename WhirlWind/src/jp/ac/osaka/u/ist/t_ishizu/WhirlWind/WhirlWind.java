@@ -62,7 +62,8 @@ public class WhirlWind {
 	public void run(){
 		initialize();
 		confirmGermination();
-		cloneSetList = createCloneSetList();
+		Boxing();
+
 		terminate();
 	}
 
@@ -251,21 +252,51 @@ public class WhirlWind {
 		return false;
 	}
 
-
+	public void Boxing(){
+		cloneSetList = createCloneSetList();
+		identifyOverlap();
+	}
 	public ArrayList<CloneSet> createCloneSetList(){
+		System.out.println("@whirWind.createCloneSetList()");
 		ArrayList<CloneSet>cloneSetList = new ArrayList<CloneSet>();
 		for(int i=0;i<sproutList.size();i++){
 			boolean valid = true;
 			for(Seed seed:sproutList.get(i).getSeedList()){
-				valid = seed.getValid();
+				valid = valid && seed.getValid();
+				seed.setInitial(tokenMap.get(seed.getFileId()).get(seed.getTS()))
+			    .setFinal(tokenMap.get(seed.getFileId()).get(seed.getTE()));
 			}
-			if(valid){
-				CloneSet cloneSet = new CloneSet();
-				cloneSet.getSeedList().addAll(sproutList.get(i).getSeedList());
-				
+			if(valid && sproutList.size()>1 && !isOverlapWithinSameCloneSet(sproutList.get(i))){
+				CloneSet cloneSet = new CloneSet()
+				.addSeedList(sproutList.get(i).getSeedList())
+				.calcWeight().isDispersive();
+				cloneSetList.add(cloneSet.setId(cloneSetList.size()));
+
 			}
 		}
 		return cloneSetList;
+	}
+
+	public boolean isOverlap(Seed seed1,Seed seed2){
+		if(seed1.getFileId()!=seed2.getFileId()) return false;
+		if((seed1.getTE()-seed2.getTS())*(seed2.getTE()-seed1.getTS())>=0){
+			return true;
+		}else return false;
+	}
+
+	public boolean isOverlapWithinSameCloneSet(Sprout sprout){
+		for(int i=0;i<sprout.getSeedList().size()-1;i++){
+			for(int j=i+1;j<sprout.getSeedList().size();j++){
+				if(isOverlap(sprout.getSeedList().get(i),sprout.getSeedList().get(j))){
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	public void identifyOverlap(){
+
 	}
 
 }

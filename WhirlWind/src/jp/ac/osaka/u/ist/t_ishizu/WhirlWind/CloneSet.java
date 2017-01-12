@@ -22,6 +22,7 @@ public class CloneSet {
 	public CloneSet setOverlapSetIndex(int overlapSetIndex){this.overlapSetIndex=overlapSetIndex;return this;}
 	public CloneSet setOverlapSetId(int overlapSetId){this.overlapSetId=overlapSetId;return this;}
 	public CloneSet setDispersive(boolean dispersive){this.dispersive=dispersive;return this;}
+	public CloneSet addSeedList(ArrayList<Seed> list){this.seedList.addAll(list);return this;}
 
 	/* getter */
 	public int getId(){return id;}
@@ -31,4 +32,27 @@ public class CloneSet {
 	public int getOverlapSetId(){return overlapSetId;}
 	public boolean getDispersive(){return dispersive;}
 
+	public CloneSet calcWeight(){
+		if(seedList!=null){
+			int w = 0;
+			for(Seed seed : seedList){
+				w += seed.calcWeight().getWeight();
+			}
+		}
+		return this;
+	}
+
+	public CloneSet isDispersive(){
+		dispersive = false;
+		int iniFileId = -1;
+		if(seedList!=null){
+			if(seedList.size()>0)iniFileId = seedList.get(0).getFileId();
+		}
+		for(Seed seed : seedList){
+			if(seed.getFileId()!=iniFileId){
+				dispersive = true;
+			}
+		}
+		return this;
+	}
 }
