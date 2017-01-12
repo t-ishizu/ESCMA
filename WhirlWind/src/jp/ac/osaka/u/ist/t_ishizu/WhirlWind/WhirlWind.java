@@ -322,4 +322,28 @@ public class WhirlWind {
 		}
 	}
 
+	public HashMap<Integer,OverlapSet> createOverlapMapBetweenCloneSet(){
+		HashMap<Integer,OverlapSet> overlapMap = new HashMap<Integer,OverlapSet>();
+		int id = 0;
+		for(int i=0;i<cloneSetList.size()-1;i++){
+			CloneSet cloneSet1 = cloneSetList.get(i);
+			for(int j=i+1;j<cloneSetList.size();j++){
+				CloneSet cloneSet2 = cloneSetList.get(j);
+				if(cloneSet1.getOverlapCloneSetList().contains(cloneSet2.getId())){
+					if(cloneSet1.getOverlapSetId()==-1 && cloneSet2.getOverlapSetId()==-1){
+						overlapMap.put(id,new OverlapSet()
+						.addCloneSet(cloneSet1).addCloneSet(cloneSet2).setId(id));
+						id++;
+					}else if(cloneSet1.getOverlapSetId() == -1){
+						overlapMap.get(cloneSet2.getOverlapSetId()).addCloneSet(cloneSet1);
+					}else if(cloneSet2.getOverlapSetId() == -1){
+						overlapMap.get(cloneSet1.getOverlapSetId()).addCloneSet(cloneSet2);
+					}else{
+
+					}
+				}
+			}
+		}
+		return overlapMap;
+	}
 }

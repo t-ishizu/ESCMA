@@ -12,6 +12,7 @@ public class CloneSet {
 	private ArrayList<Integer> overlapCloneSetList;
 
 	public CloneSet(){
+		overlapSetId = -1;
 		seedList = new ArrayList<Seed>();
 		overlapCloneSetList = new ArrayList<Integer>();
 	}
