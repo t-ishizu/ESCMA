@@ -62,7 +62,7 @@ public class WhirlWind {
 	public void run(){
 		initialize();
 		confirmGermination();
-		cloneSetList = createCloneSetList();;
+		cloneSetList = createCloneSetList();
 		terminate();
 	}
 
@@ -254,7 +254,17 @@ public class WhirlWind {
 
 	public ArrayList<CloneSet> createCloneSetList(){
 		ArrayList<CloneSet>cloneSetList = new ArrayList<CloneSet>();
-		
+		for(int i=0;i<sproutList.size();i++){
+			boolean valid = true;
+			for(Seed seed:sproutList.get(i).getSeedList()){
+				valid = seed.getValid();
+			}
+			if(valid){
+				CloneSet cloneSet = new CloneSet();
+				cloneSet.getSeedList().addAll(sproutList.get(i).getSeedList());
+				
+			}
+		}
 		return cloneSetList;
 	}
 
