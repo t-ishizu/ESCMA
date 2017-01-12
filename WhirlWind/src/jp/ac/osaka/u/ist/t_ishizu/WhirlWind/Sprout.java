@@ -7,6 +7,7 @@ public class Sprout {
 	private ArrayList<Seed> seedList;
 	private ArrayList<Integer> splitIdList;
 	private ArrayList<Integer> spliteSproutIdList;
+	private boolean valid=false;
 
 	public Sprout(){
 		seedList = new ArrayList<Seed>();
@@ -20,11 +21,14 @@ public class Sprout {
 	public ArrayList<Seed> getSeedList(){return seedList;}
 	public ArrayList<Integer> getSplitList(){return splitIdList;}
 	public ArrayList<Integer> getSplitSproutList(){return spliteSproutIdList;}
-	
+	public boolean getValid(){return valid;}
+
 	/* setter */
 	public Sprout setId(int id){this.id = id;return this;}
 	public Sprout addSeedList(Seed s){seedList.add(s);return this;}
 	public Sprout addSplit(int splitId){splitIdList.add(splitId);return this;}
 	public Sprout addSplitSprout(int splitSproutId){spliteSproutIdList.add(splitSproutId);return this;}
+	public Sprout isValid(){this.valid=true;return this;}
+	public Sprout isInvalid(){this.valid=false;return this;}
 
 }

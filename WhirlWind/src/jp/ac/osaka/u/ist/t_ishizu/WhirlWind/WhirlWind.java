@@ -252,12 +252,18 @@ public class WhirlWind {
 		return false;
 	}
 
+/**
+ * Boxing()
+ * This method create Clone Set List to estimate Slimming.
+ *
+ */
+
 	public void Boxing(){
+		System.out.println("@whirWind.Boxing()");
 		cloneSetList = createCloneSetList();
 		identifyOverlap();
 	}
 	public ArrayList<CloneSet> createCloneSetList(){
-		System.out.println("@whirWind.createCloneSetList()");
 		ArrayList<CloneSet>cloneSetList = new ArrayList<CloneSet>();
 		for(int i=0;i<sproutList.size();i++){
 			boolean valid = true;
@@ -267,6 +273,7 @@ public class WhirlWind {
 			    .setFinal(tokenMap.get(seed.getFileId()).get(seed.getTE()));
 			}
 			if(valid && sproutList.size()>1 && !isOverlapWithinSameCloneSet(sproutList.get(i))){
+				sproutList.get(i).isValid();
 				CloneSet cloneSet = new CloneSet()
 				.addSeedList(sproutList.get(i).getSeedList())
 				.calcWeight().isDispersive();
@@ -296,7 +303,23 @@ public class WhirlWind {
 	}
 
 	public void identifyOverlap(){
-
+		for(int fileId:SeedMap.keySet()){
+			for(int i=0;i<SeedMap.get(fileId).size()-1;i++){
+				Seed seed1 = SeedMap.get(fileId).get(i);
+				if(seed1.getSprout().getValid()){
+					for(int j=i+1;j<SeedMap.get(fileId).size();j++){
+						Seed seed2 = SeedMap.get(fileId).get(j);
+						if(isOverlap(seed1,seed2)&&seed2.getSprout().getValid()){
+							seed1.getCloneSet().addOverlapCloneSetList(seed2.getCloneSet());
+						}
+					}
+				}
+			}
+		}
+		System.out.println("@Overlap : ");
+		for(CloneSet cs:cloneSetList){
+			System.out.println("id: "+cs.getId()+" "+cs.getOverlapCloneSetList());
+		}
 	}
 
 }
