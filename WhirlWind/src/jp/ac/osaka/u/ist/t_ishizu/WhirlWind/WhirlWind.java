@@ -7,22 +7,14 @@ package jp.ac.osaka.u.ist.t_ishizu.WhirlWind;
 
 import static jp.ac.osaka.u.ist.t_ishizu.WhirlWind.TokenType.*;
 import static jp.ac.osaka.u.ist.t_ishizu.WhirlWind.UpperStream.*;
-
+import static jp.ac.osaka.u.ist.t_ishizu.WhirlWind.Option.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 public class WhirlWind {
 	/**
 	 * @author t-ishizu
 	 *
-	 */
-	public static final int BASIC = 0;
-	public static final int GREEDY = 1;
-	public static int slimmingMode = GREEDY;//BASIC;
-	/**
-	 * slimmingMode
-	 * 0 BASIC
-	 * 1 HEURISTIC GREEDY
-	 * 2 HEURISTIC
 	 */
 
 	public static ArrayList<String> fileList;
@@ -32,13 +24,14 @@ public class WhirlWind {
 	public static HashMap<Integer, ArrayList<Token>> tokenMap;
 	public static int splitedSeedId = -2;
 	public static ArrayList<CloneSet> cloneSetList;
+	public static HashMap<Integer,OverlapSet> overlapMap;
 
 	public WhirlWind(){
 
 	}
 
 	public void initialize(){
-		/* create ArrayList by UpperStream class */
+		/* create ArrayLists by UpperStream class */
 		System.out.println("@WhirlWind.initialize()");
 		fileList = createFileList();
 		SeedMap = createSeedMap();
@@ -57,13 +50,23 @@ public class WhirlWind {
 		tokenMap.clear();
 		splitedSeedId = -2;
 		cloneSetList.clear();
+		overlapMap.clear();
 	}
-
+	
 	public void run(){
 		initialize();
 		confirmGermination();
 		Boxing();
-
+		switch(slimmingMode){
+		case BASIC:
+			break;
+		case GREEDY:
+			greedy();
+			break;
+		default :
+			break;
+		}
+		
 		terminate();
 	}
 
@@ -262,7 +265,10 @@ public class WhirlWind {
 		System.out.println("@whirWind.Boxing()");
 		cloneSetList = createCloneSetList();
 		identifyOverlap();
+		overlapMap = createOverlapMapBetweenCloneSet();
+		
 	}
+	
 	public ArrayList<CloneSet> createCloneSetList(){
 		ArrayList<CloneSet>cloneSetList = new ArrayList<CloneSet>();
 		for(int i=0;i<sproutList.size();i++){
@@ -323,6 +329,7 @@ public class WhirlWind {
 	}
 
 	public HashMap<Integer,OverlapSet> createOverlapMapBetweenCloneSet(){
+		System.out.println("@WhirlWind.createOverlapMapBetweenCloneSet()");
 		HashMap<Integer,OverlapSet> overlapMap = new HashMap<Integer,OverlapSet>();
 		int id = 0;
 		for(int i=0;i<cloneSetList.size()-1;i++){
@@ -331,19 +338,39 @@ public class WhirlWind {
 				CloneSet cloneSet2 = cloneSetList.get(j);
 				if(cloneSet1.getOverlapCloneSetList().contains(cloneSet2.getId())){
 					if(cloneSet1.getOverlapSetId()==-1 && cloneSet2.getOverlapSetId()==-1){
-						overlapMap.put(id,new OverlapSet()
-						.addCloneSet(cloneSet1).addCloneSet(cloneSet2).setId(id));
+						overlapMap.put(id,new OverlapSet().setId(id)
+						.addCloneSet(cloneSet1).addCloneSet(cloneSet2));
 						id++;
 					}else if(cloneSet1.getOverlapSetId() == -1){
 						overlapMap.get(cloneSet2.getOverlapSetId()).addCloneSet(cloneSet1);
 					}else if(cloneSet2.getOverlapSetId() == -1){
 						overlapMap.get(cloneSet1.getOverlapSetId()).addCloneSet(cloneSet2);
-					}else{
-
+					}else if(cloneSet1.getOverlapSetId()!=cloneSet2.getOverlapSetId()){
+						OverlapSet overlapSet1 = overlapMap.get(cloneSet1.getOverlapSetId());
+						OverlapSet overlapSet2 = overlapMap.get(cloneSet2.getOverlapSetId());
+						for(int cloneSetId : overlapSet2.getCloneSetList()){
+							overlapSet1.addCloneSet(cloneSetList.get(cloneSetId));
+						}
+						overlapMap.remove(cloneSet2.getOverlapSetId());
 					}
 				}
 			}
 		}
+		for(OverlapSet overlapSet : overlapMap.values())
+		System.out.println(overlapSet.getMessage());
 		return overlapMap;
+	}
+	
+	public void greedy(){
+		Collections.sort(cloneSetList,new WeightComparator());
+		for(int i=0;i<cloneSetList.size();i++){
+			CloneSet cloneSet = cloneSetList.get(i);
+			if(!cloneSet.isHot()){
+				cloneSet.setHot().setSlimming();
+				for(int index : cloneSet.getOverlapCloneSetList()){
+					cloneSetList.get(index).setHot();
+				}
+			}
+		}
 	}
 }

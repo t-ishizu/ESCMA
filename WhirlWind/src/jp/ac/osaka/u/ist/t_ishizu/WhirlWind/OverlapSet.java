@@ -10,6 +10,7 @@ public class OverlapSet {
 	private int bestEval;
 
 	public OverlapSet(){
+		id=-1;
 		cloneSetList = new ArrayList<Integer>();
 	}
 
@@ -29,4 +30,8 @@ public class OverlapSet {
 	public int[][] getMatrix(){return bestMatrix;}
 	public int[] getVector(){return bestVector;}
 	public int getEval(){return bestEval;}
+	
+	public String getMessage(){
+		return "id: " + id + " " + cloneSetList;
+	}
 }

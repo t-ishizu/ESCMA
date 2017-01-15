@@ -10,6 +10,8 @@ public class CloneSet {
 	private int overlapSetId;
 	private boolean dispersive;
 	private ArrayList<Integer> overlapCloneSetList;
+	private boolean slimming=false;
+	private boolean hot=false;
 
 	public CloneSet(){
 		overlapSetId = -1;
@@ -29,6 +31,9 @@ public class CloneSet {
 	public CloneSet setOverlapSetIndex(int overlapSetIndex){this.overlapSetIndex=overlapSetIndex;return this;}
 	public CloneSet setOverlapSetId(int overlapSetId){this.overlapSetId=overlapSetId;return this;}
 	public CloneSet setDispersive(boolean dispersive){this.dispersive=dispersive;return this;}
+	public CloneSet setSlimming(){this.slimming=true;return this;}
+	public CloneSet setFatting(){this.slimming=false;return this;}
+	public CloneSet setHot(){this.hot=true;return this;}
 	public CloneSet addSeedList(ArrayList<Seed> list){
 		this.seedList.addAll(list);
 		for(Seed seed:list){
@@ -75,5 +80,7 @@ public class CloneSet {
 	public int getOverlapSetIndex(){return overlapSetIndex;}
 	public int getOverlapSetId(){return overlapSetId;}
 	public boolean getDispersive(){return dispersive;}
+	public boolean isSlimming(){return slimming;}
+	public boolean isHot(){return hot;}
 	public ArrayList<Integer> getOverlapCloneSetList(){return overlapCloneSetList;}
 }
