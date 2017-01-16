@@ -1,11 +1,6 @@
 package jp.ac.osaka.u.ist.t_ishizu.WhirlWind;
 
-import static jp.ac.osaka.u.ist.t_ishizu.WhirlWind.WhirlWind.SeedMap;
-import static jp.ac.osaka.u.ist.t_ishizu.WhirlWind.WhirlWind.cloneSetList;
-import static jp.ac.osaka.u.ist.t_ishizu.WhirlWind.WhirlWind.CCFXDFileArray;
-import static jp.ac.osaka.u.ist.t_ishizu.WhirlWind.WhirlWind.tokenMap;
-import static jp.ac.osaka.u.ist.t_ishizu.WhirlWind.WhirlWind.fileList;
-
+import static jp.ac.osaka.u.ist.t_ishizu.WhirlWind.WhirlWind.*;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -16,7 +11,7 @@ import java.util.ArrayList;
 
 public class LowerStream {
 	public static String outputFile = "ww.txt";
-	
+
 	public static PrintWriter getPrintWriterWithOverwrite(File output){
 		try{
 			return new PrintWriter(new BufferedWriter(new FileWriter(output,false)));
@@ -25,7 +20,7 @@ public class LowerStream {
 		}
 		return null;
 	}
-	
+
 	public static PrintWriter getPrintWriterWithOverwrite(String output){
 		try{
 			return new PrintWriter(new BufferedWriter(new FileWriter(new File(output),false)));
@@ -34,7 +29,7 @@ public class LowerStream {
 		}
 		return null;
 	}
-	
+
 	public static PrintWriter getPrintWriterWithoutOverwrite(File output){
 		try{
 			return new PrintWriter(new BufferedWriter(new FileWriter(output,true)));
@@ -43,7 +38,7 @@ public class LowerStream {
 		}
 		return null;
 	}
-	
+
 	public static PrintWriter getPrintWriterWithoutOverwrite(String output){
 		try{
 			return new PrintWriter(new BufferedWriter(new FileWriter(new File(output),true)));
@@ -52,7 +47,7 @@ public class LowerStream {
 		}
 		return null;
 	}
-	
+
 	public static void resultMessage(String output){
 		PrintWriter pw = getPrintWriterWithOverwrite(output);
 		for(CloneSet cloneSet:cloneSetList){
@@ -67,10 +62,12 @@ public class LowerStream {
 			}
 		}
 		pw.close();
+		System.out.println("@LowerStream.resultMessage() c.txt");
 	}
-	
+
 	public static void updateSeedFile(String output){
 		PrintWriter pw = getPrintWriterWithOverwrite(output);
+		pw.println("version: ccfx 10.2.7");
 		pw.println("format: pair_diploid");
 		pw.println("option: -b 50");
 		pw.println("option: -s 2");
@@ -110,8 +107,9 @@ public class LowerStream {
 		pw.println("clone_set_remarks {");
 		pw.println("}");
 		pw.close();
+		System.out.println("@LowerStream.updateSeedFile() d.txt");
 	}
-	
+
 	public static boolean isSameSeed(Seed seed1,Seed seed2){
 		if(seed1.getTS()==seed2.getTS()&&seed1.getTE()==seed2.getTE()){
 			if(seed1.getFileId()==seed2.getFileId()){
