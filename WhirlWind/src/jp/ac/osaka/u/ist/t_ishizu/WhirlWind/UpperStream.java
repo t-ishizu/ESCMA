@@ -237,7 +237,7 @@ public class UpperStream {
 	
 	public static HashMap<Integer,ArrayList<Token>> createTokenMap(){
 		HashMap<Integer,ArrayList<Token>> tokenMap = new HashMap<Integer, ArrayList<Token>>(); 
-		for(int fileId:SeedMap.keySet()){
+		for(int fileId=1;fileId<=fileList.size();fileId++){
 			StringBuffer sb = new StringBuffer();
 			sb.append(CCFXDFileArray[1]);	
 			sb.append("\\.ccfxprepdir");
@@ -263,6 +263,7 @@ public class UpperStream {
 							                 .setToken(str_split[4]);
 					tokenList.add(token);
 				}
+				if(SeedMap.containsKey(fileId))
 				for(Seed s:SeedMap.get(fileId)){
 					s.setLS(coorList.get(s.getTS())[0]).setLE(coorList.get(s.getTE())[0])
 					 .setCS(coorList.get(s.getTS())[1]).setCE(coorList.get(s.getTE())[1]);

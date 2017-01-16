@@ -8,6 +8,7 @@ package jp.ac.osaka.u.ist.t_ishizu.WhirlWind;
 import static jp.ac.osaka.u.ist.t_ishizu.WhirlWind.TokenType.*;
 import static jp.ac.osaka.u.ist.t_ishizu.WhirlWind.UpperStream.*;
 import static jp.ac.osaka.u.ist.t_ishizu.WhirlWind.Option.*;
+import static jp.ac.osaka.u.ist.t_ishizu.WhirlWind.LowerStream.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -66,7 +67,8 @@ public class WhirlWind {
 		default :
 			break;
 		}
-		
+		resultMessage("c.txt");
+		updateSeedFile("d.txt");
 		terminate();
 	}
 
