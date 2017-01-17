@@ -28,7 +28,7 @@ public class MyFrame extends JFrame implements ActionListener{
 	private Container contentPane;
 
 	public File seedFile;
-
+	public boolean pairButtonCheck = false;
 	/**
 	 * Launch the application.
 	 */
@@ -80,6 +80,7 @@ public class MyFrame extends JFrame implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		pairButtonCheck = false;
 		int command = Integer.parseInt(e.getActionCommand());
 		getContentPane().removeAll();
 		JPanel panel = new JPanel();
@@ -109,6 +110,9 @@ public class MyFrame extends JFrame implements ActionListener{
 			contentPane.add(panel);
 			setVisible(true);
 			break;
+		case 4:
+
+			break;
 		default:
 			panel=createInitialPanel();
 			contentPane.add(panel);
@@ -133,7 +137,22 @@ public class MyFrame extends JFrame implements ActionListener{
 
 	public JPanel createNewSeedFilesSelectionPanel(){
 		JPanel panel = new JPanel();
+		JTextField textbox1 = new JTextField();
+		textbox1.setBorder(new TitledBorder("Clone File Path:"));
+		textbox1.setPreferredSize(new Dimension(400, 40));
+		panel.add(textbox1);
 
+		JButton nextButton = createButton("次へ","4");
+		nextButton.setEnabled(false);
+		panel.add(new JButton(new PairDirectryDialog(textbox1,nextButton)));
+
+		JTextField textbox2 = new JTextField();
+		textbox2.setBorder(new TitledBorder("Clone File Path:"));
+		textbox2.setPreferredSize(new Dimension(400, 40));
+		panel.add(textbox2);
+		panel.add(new JButton(new PairDirectryDialog(textbox2,nextButton)));
+		panel.add(nextButton);
+		panel.add(createButton("戻る","0"));
 		return panel;
 	}
 
@@ -154,7 +173,7 @@ public class MyFrame extends JFrame implements ActionListener{
 		private JTextField textbox;
 		private JButton next;
 		private DirectryDialog(JTextField textbox,JButton next){
-			super("フォルダ選択");
+			super("選択");
 			this.textbox = textbox;
 			this.next = next;
 		}
@@ -168,6 +187,30 @@ public class MyFrame extends JFrame implements ActionListener{
 				 seedFile = chooser.getSelectedFile();
 			     textbox.setText(seedFile.getPath());
 			     next.setEnabled(true);
+			}
+		}
+	}
+
+	private class PairDirectryDialog extends AbstractAction{
+		private JTextField textbox;
+		private JButton next;
+		private PairDirectryDialog(JTextField textbox,JButton next){
+			super("ファイル選択");
+			this.textbox = textbox;
+			this.next = next;
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e){
+			JFileChooser chooser = new JFileChooser();
+			chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+			int answer = chooser.showDialog(null,"選択");
+			if(answer == JFileChooser.APPROVE_OPTION){
+				 seedFile = chooser.getSelectedFile();
+			     textbox.setText(seedFile.getPath());
+			     if(pairButtonCheck)
+			     next.setEnabled(true);
+			     else pairButtonCheck = true;
 			}
 		}
 	}
