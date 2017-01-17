@@ -1,19 +1,26 @@
 package jp.ac.osaka.u.ist.t_ishizu.Viewer;
 
+import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.PrintStream;
 
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
+
+import jp.ac.osaka.u.ist.t_ishizu.WhirlWind.MyOption;
+import jp.ac.osaka.u.ist.t_ishizu.WhirlWind.Pump;
 
 
 public class MyFrame extends JFrame implements ActionListener{
@@ -52,6 +59,7 @@ public class MyFrame extends JFrame implements ActionListener{
 	public JPanel createInitialPanel(){
 		JPanel panel = new JPanel();
 		panel.add(createButton("既に検出されているコードクローンの集約量の推定","1"));
+		panel.add(createButton("推定結果の出力","3"));
 		return panel;
 	}
 
@@ -78,18 +86,35 @@ public class MyFrame extends JFrame implements ActionListener{
 		switch(command){
 		case 0:
 			panel=createInitialPanel();
+			contentPane.add(panel);
+			setVisible(true);
 			break;
 		case 1:
 			panel=createSeedFileSelectionPanel();
+			contentPane.add(panel);
+			setVisible(true);
 			break;
 		case 2:
+			contentPane.add(createRunningWhirlWindPanel());
+			JButton button = createButton("完了","0");
+			button.setPreferredSize(new Dimension(100,100));
+			button.setEnabled(false);
+			contentPane.add(new JPanel().add(button),BorderLayout.SOUTH);
+			setVisible(true);
+			Thread thread = new Thread(new MyRunnable(button));
+			thread.start();
+			break;
+		case 3:
+			panel=createNewSeedFilesSelectionPanel();
+			contentPane.add(panel);
+			setVisible(true);
 			break;
 		default:
 			panel=createInitialPanel();
+			contentPane.add(panel);
+			setVisible(true);
 			break;
 		}
-		contentPane.add(panel);
-		setVisible(true);
 	}
 
 	public JPanel createSeedFileSelectionPanel(){
@@ -106,6 +131,25 @@ public class MyFrame extends JFrame implements ActionListener{
 		return panel;
 	}
 
+	public JPanel createNewSeedFilesSelectionPanel(){
+		JPanel panel = new JPanel();
+
+		return panel;
+	}
+
+	public JScrollPane createRunningWhirlWindPanel(){
+		//JPanel panel = new JPanel();
+		MyOption.setSeedFile(seedFile);
+		JTextArea textarea = new JTextArea();
+		textarea.setEditable(false);
+		JScrollPane scrollpane = new JScrollPane(textarea);
+		scrollpane.setPreferredSize(new Dimension(200,100));
+		RedirectConsole rc = new RedirectConsole(textarea);
+		System.setOut(new PrintStream(rc,true));
+		System.setErr(new PrintStream(rc,true));
+		//panel.add(textarea);
+		return scrollpane;
+	}
 	private class DirectryDialog extends AbstractAction{
 		private JTextField textbox;
 		private JButton next;
@@ -126,5 +170,22 @@ public class MyFrame extends JFrame implements ActionListener{
 			     next.setEnabled(true);
 			}
 		}
+	}
+}
+
+class MyRunnable implements Runnable{
+	private JButton button;
+	public MyRunnable(JButton button){
+		this.button=button;
+	}
+	@Override
+	public void run(){
+
+		System.out.println("推定を開始しています．");
+
+		Pump.main(new String[]{});
+		System.out.println();
+		System.out.println("推定が終了しました．");
+		button.setEnabled(true);
 	}
 }
